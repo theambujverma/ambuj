@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }   
+        h1 {
+            color: #333;
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #0066cc;
+            background: #f9f9f9;
+        }
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0052a3;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #itemList, #cartList {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            min-height: 100px;
+        }
+        .list-item, .cart-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f0f0f0;
+            border-left: 3px solid #0066cc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .remove-btn {
+            background-color: #cc0000;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .remove-btn:hover {
+            background-color: #990000;
+        }
+        #counter {
+            font-size: 24px;
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #ffffcc;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .error {
+            color: #cc0000;
+            background-color: #ffe6e6;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            color: #00aa00;
+            background-color: #e6ffe6;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DOM Manipulation - Interactive Examples</h1>
+
+        <!-- DEMO 1: Text Content -->
+        <div class="demo-section">
+            <h3>1. Changing Text Content</h3>
+            <p id="paragraph">Original text here</p>
+            <button onclick="changeTextContent()">Change Text</button>
+            <button onclick="appendText()">Append Text</button>
+        </div>
+
+        <!-- DEMO 2: Classes and Styles -->
+        <div class="demo-section">
+            <h3>2. Toggle Highlight</h3>
+            <p id="highlightParagraph">This text can be highlighted</p>
+            <button onclick="toggleHighlight()">Toggle Highlight</button>
+        </div>
+
+        <!-- DEMO 3: Counter Example -->
+        <div class="demo-section">
+            <h3>3. Counter App</h3>
+            <p>Count: <span id="counter">0</span></p>
+            <button onclick="increment()">Increment</button>
+            <button onclick="decrement()">Decrement</button>
+            <button onclick="resetCounter()">Reset</button>
+        </div>
+
+        <!-- DEMO 4: To-Do List -->
+        <div class="demo-section">
+            <h3>4. To-Do List Manager</h3>
+            <input type="text" id="todoInput" placeholder="Enter a task...">
+            <button onclick="addTodo()">Add Task</button>
+            <div id="todoList"></div>
+            <button onclick="clearCompleted()">Clear Completed</button>
+        </div>
+
+        <!-- DEMO 5: Shopping Cart -->
+        <div class="demo-section">
+            <h3>5. Shopping Cart</h3>
+            <div class="demo-section">
+                <h4>Available Products:</h4>
+                <input type="text" id="productInput" placeholder="Product name">
+                <input type="number" id="priceInput" placeholder="Price" min="1">
+                <input type="number" id="quantityInput" placeholder="Quantity" min="1" value="1">
+                <button onclick="addToCart()">Add to Cart</button>
+            </div>
+            <div id="cartList"></div>
+            <p><strong>Total: Rs <span id="cartTotal">0</span></strong></p>
+        </div>
+
+        <!-- DEMO 6: Form Validation -->
+        <div class="demo-section">
+            <h3>6. User Registration Form</h3>
+            <input type="text" id="userName" placeholder="Full Name">
+            <input type="email" id="userEmail" placeholder="Email">
+            <input type="password" id="userPassword" placeholder="Password (min 6 chars)">
+            <button onclick="validateForm()">Register</button>
+            <div class="error" id="errorMsg"></div>
+            <div class="success" id="successMsg"></div>
+        </div>
+
+        <!-- DEMO 7: Dynamic List -->
+        <div class="demo-section">
+            <h3>7. Dynamic Item List</h3>
+            <input type="text" id="itemInput" placeholder="Enter item name">
+            <button onclick="addItem()">Add Item</button>
+            <div id="itemList"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // DOM MANIPULATION - Interacting with HTML
+        // ============================================
+
+        // 1. Selecting Elements
+        // getElementById - Select by ID
+        const paragraph = document.getElementById("paragraph");
+        
+        // querySelector - Select by CSS selector
+        const container = document.querySelector(".container");
+        
+        // querySelectorAll - Select multiple elements
+        const buttons = document.querySelectorAll("button");
+        console.log("Found buttons:", buttons.length);
+
+        // 2. Getting/Setting Content
+        function changeTextContent() {
+            // textContent - plain text
+            paragraph.textContent = "Text has been changed!";
+            
+            // innerHTML - with HTML
+            // paragraph.innerHTML = "<strong>Bold text</strong>";
+        }
+
+        function appendText() {
+            // Add to existing content
+            paragraph.textContent += " Added more text.";
+        }
+
+        // 3. Adding/Removing Classes
+        function toggleHighlight() {
+            const highlightPara = document.getElementById("highlightParagraph");
+            highlightPara.classList.toggle("highlight");
+            // classList.add() - Add class
+            // classList.remove() - Remove class
+            // classList.contains() - Check if has class
+        }
+
+        // 4. Changing Styles
+        function changeStyles() {
+            const element = document.getElementById("someElement");
+            element.style.color = "red";
+            element.style.fontSize = "20px";
+            element.style.backgroundColor = "yellow";
+        }
+
+        // ============================================
+        // COUNTER EXAMPLE - State Management
+        // ============================================
+        let count = 0;
+
+        function increment() {
+            count++;
+            updateCounter();
+        }
+
+        function decrement() {
+            count--;
+            updateCounter();
+        }
+
+        function resetCounter() {
+            count = 0;
+            updateCounter();
+        }
+
+        function updateCounter() {
+            document.getElementById("counter").textContent = count;
+        }
+
+        // ============================================
+        // TO-DO LIST - CRUD Operations
+        // ============================================
+        let todos = [];
+
+        function addTodo() {
+            const input = document.getElementById("todoInput");
+            const todoText = input.value.trim();
+
+            if (todoText === "") {
+                alert("Please enter a task");
+                return;
+            }
+
+            // Create todo object
+            const todo = {
+                id: Date.now(),
+                text: todoText,
+                completed: false
+            };
+
+            todos.push(todo);
+            input.value = ""; // Clear input
+            renderTodos();
+        }
+
+        function renderTodos() {
+            const todoList = document.getElementById("todoList");
+            todoList.innerHTML = ""; // Clear list
+
+            todos.forEach(todo => {
+                const todoItem = document.createElement("div");
+                todoItem.className = "list-item";
+                
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = todo.completed;
+                checkbox.onchange = () => toggleTodo(todo.id);
+
+                const span = document.createElement("span");
+                span.textContent = todo.text;
+                if (todo.completed) {
+                    span.style.textDecoration = "line-through";
+                    span.style.color = "#aaa";
+                }
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+                deleteBtn.className = "remove-btn";
+                deleteBtn.onclick = () => deleteTodo(todo.id);
+
+                todoItem.appendChild(checkbox);
+                todoItem.appendChild(span);
+                todoItem.appendChild(deleteBtn);
+                todoList.appendChild(todoItem);
+            });
+        }
+
+        function toggleTodo(id) {
+            todos = todos.map(todo => 
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            );
+            renderTodos();
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(todo => todo.id !== id);
+            renderTodos();
+        }
+
+        function clearCompleted() {
+            todos = todos.filter(todo => !todo.completed);
+            renderTodos();
+        }
+
+        // ============================================
+        // SHOPPING CART - E-COMMERCE Example
+        // ============================================
+        let cartItems = [];
+
+        function addToCart() {
+            const productName = document.getElementById("productInput").value;
+            const price = parseFloat(document.getElementById("priceInput").value);
+            const quantity = parseInt(document.getElementById("quantityInput").value);
+
+            if (!productName || !price || !quantity) {
+                alert("Please fill all fields");
+                return;
+            }
+
+            const cartItem = {
+                id: Date.now(),
+                name: productName,
+                price: price,
+                quantity: quantity
+            };
+
+            cartItems.push(cartItem);
+            document.getElementById("productInput").value = "";
+            document.getElementById("priceInput").value = "";
+            document.getElementById("quantityInput").value = "1";
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartList = document.getElementById("cartList");
+            cartList.innerHTML = "";
+
+            let total = 0;
+
+            cartItems.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                const cartItemDiv = document.createElement("div");
+                cartItemDiv.className = "cart-item";
+                cartItemDiv.innerHTML = `
+                    <div>
+                        <strong>${item.name}</strong><br>
+                        Rs ${item.price} x ${item.quantity} = Rs ${itemTotal}
+                    </div>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+                cartList.appendChild(cartItemDiv);
+            });
+
+            document.getElementById("cartTotal").textContent = total;
+        }
+
+        function removeFromCart(id) {
+            cartItems = cartItems.filter(item => item.id !== id);
+            renderCart();
+        }
+
+        // ============================================
+        // FORM VALIDATION
+        // ============================================
+        function validateForm() {
+            const name = document.getElementById("userName").value.trim();
+            const email = document.getElementById("userEmail").value.trim();
+            const password = document.getElementById("userPassword").value;
+            const errorDiv = document.getElementById("errorMsg");
+            const successDiv = document.getElementById("successMsg");
+
+            errorDiv.style.display = "none";
+            successDiv.style.display = "none";
+
+            // Validation logic
+            if (!name) {
+                showError("Name is required", errorDiv);
+                return;
+            }
+
+            if (!email.includes("@") || !email.includes(".")) {
+                showError("Valid email is required", errorDiv);
+                return;
+            }
+
+            if (password.length < 6) {
+                showError("Password must be at least 6 characters", errorDiv);
+                return;
+            }
+
+            // If all valid
+            showSuccess(`Welcome, ${name}! Registration successful.`, successDiv);
+            document.getElementById("userName").value = "";
+            document.getElementById("userEmail").value = "";
+            document.getElementById("userPassword").value = "";
+        }
+
+        function showError(message, element) {
+            element.textContent = message;
+            element.style.display = "block";
+        }
+
+        function showSuccess(message, element) {
+            element.textContent = message;
+            element.style.display = "block";
+        }
+
+        // ============================================
+        // DYNAMIC LIST EXAMPLE
+        // ============================================
+        let items = [];
+
+        function addItem() {
+            const input = document.getElementById("itemInput");
+            const itemName = input.value.trim();
+
+            if (!itemName) {
+                alert("Please enter an item");
+                return;
+            }
+
+            items.push({
+                id: Date.now(),
+                name: itemName
+            });
+
+            input.value = "";
+            renderItems();
+        }
+
+        function renderItems() {
+            const itemList = document.getElementById("itemList");
+            itemList.innerHTML = "";
+
+            items.forEach(item => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "list-item";
+                itemDiv.innerHTML = `
+                    <span>${item.name}</span>
+                    <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+                `;
+                itemList.appendChild(itemDiv);
+            });
+        }
+
+        function removeItem(id) {
+            items = items.filter(item => item.id !== id);
+            renderItems();
+        }
+
+        console.log("Page loaded - all DOM examples ready!");
+    </script>
+</body>
+</html>

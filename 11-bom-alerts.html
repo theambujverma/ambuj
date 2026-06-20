@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM - Browser Object Model & Alert Boxes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        .section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 8px 5px 8px 0;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        button.secondary {
+            background: #999;
+        }
+
+        button.secondary:hover {
+            background: #777;
+        }
+
+        .demo-section {
+            background: #e6f2ff;
+            border-left: 4px solid #0066cc;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .output {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+            color: #333;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .info-box {
+            background: #fffbea;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .info-box strong {
+            color: #ff9800;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .grid-item {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .grid-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .grid-item button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        table code {
+            background: #f0f0f0;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .bom-diagram {
+            background: #f5f5f5;
+            border: 2px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .bom-diagram div {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 4px;
+        }
+
+        .nested {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .nested div {
+            background: #764ba2;
+        }
+
+        input[type="text"], input[type="number"], input[type="email"] {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        .list-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-left: 4px solid #667eea;
+            border-radius: 3px;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            text-align: center;
+            color: #666;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <h1><span class="emoji">🌐</span>Browser Object Model (BOM) & Alert Boxes</h1>
+            <p>Browser ke features ko JavaScript se control karo!</p>
+        </header>
+
+        <!-- BOM OVERVIEW -->
+        <div class="section">
+            <h2>BOM Kya Hai? 🤔</h2>
+            <p><strong>Browser Object Model (BOM)</strong> browser ke features ko access karne ka tarika hai. Yeh JavaScript objects hain jo browser ko control karte hain!</p>
+            
+            <h3>BOM Ka Hierarchy:</h3>
+            <div class="bom-diagram">
+                <div><strong>🪟 Window Object (Sabse top level)</strong></div>
+                <div class="nested">
+                    <div><strong>📍 Location</strong> - URL manage</div>
+                    <div><strong>📜 History</strong> - Browser history</div>
+                    <div><strong>📊 Document</strong> - HTML content</div>
+                    <div><strong>ℹ️ Navigator</strong> - Browser info</div>
+                    <div><strong>📺 Screen</strong> - Display info</div>
+                    <div><strong>⏱️ Timers</strong> - setTimeout, setInterval</div>
+                </div>
+            </div>
+
+            <p><strong>💡 Note:</strong> BOM browser-specific hai. Server pe kaam nahi karta!</p>
+        </div>
+
+        <!-- 1. WINDOW OBJECT -->
+        <div class="section">
+            <h2>1️⃣ Window Object</h2>
+            <p>Sabse important object! Browser ke sab features yahan se access hote hain.</p>
+
+            <h3>Window Object Properties:</h3>
+            <div class="code-block">
+<span class="comment">// Window object sabhi variables ka parent hai</span>
+console.log(window.innerWidth);    <span class="comment">// ViewPort width</span>
+console.log(window.innerHeight);   <span class="comment">// ViewPort height</span>
+console.log(window.outerWidth);    <span class="comment">// Full browser width</span>
+console.log(window.outerHeight);   <span class="comment">// Full browser height</span>
+
+<span class="comment">// Window object ke through sab access hote hain</span>
+window.console.log("Hello");       <span class="comment">// Same as console.log()</span>
+window.document.title;             <span class="comment">// Same as document.title</span>
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try Window Properties:</h4>
+                <button onclick="showWindowProperties()">Show Window Properties</button>
+                <div id="windowOutput" class="output"></div>
+            </div>
+        </div>
+
+        <!-- 2. ALERT BOX -->
+        <div class="section">
+            <h2>2️⃣ ALERT BOX - Alert Dialog</h2>
+            <p>User ko message dikhate ho. Sirf "OK" button hota hai.</p>
+
+            <h3>Syntax:</h3>
+            <div class="code-block">
+<span class="keyword">alert</span>(<span class="string">"Message here"</span>);
+            </div>
+
+            <h3>Features:</h3>
+            <div class="list-item">✅ User ko notification dena ho</div>
+            <div class="list-item">✅ Sirf "OK" button (mandatory)</div>
+            <div class="list-item">✅ Return value nahi hota</div>
+            <div class="list-item">✅ Webpage freeze hota hai jab tak close na karo</div>
+
+            <h3>Examples:</h3>
+            <div class="code-block">
+<span class="comment">// Simple alert</span>
+<span class="keyword">alert</span>(<span class="string">"Welcome to my website!"</span>);
+
+<span class="comment">// Multi-line message</span>
+<span class="keyword">alert</span>(<span class="string">"Hello User!\nYou logged in successfully.\nEnjoy your experience!"</span>);
+
+<span class="comment">// With variables</span>
+<span class="keyword">const</span> name = <span class="string">"John"</span>;
+<span class="keyword">alert</span>(<span class="string">`Welcome, ${name}!`</span>);
+
+<span class="comment">// After some action</span>
+<span class="keyword">function</span> submitForm() {
+    <span class="keyword">alert</span>(<span class="string">"Form submitted successfully!"</span>);
+}
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try Alert Box:</h4>
+                <button onclick="simpleAlert()">Simple Alert</button>
+                <button onclick="multilineAlert()">Multi-line Alert</button>
+                <button onclick="welcomeAlert()">Welcome Alert</button>
+                <button onclick="errorAlert()">Error Alert</button>
+                <button onclick="successAlert()">Success Alert</button>
+            </div>
+
+            <div class="info-box">
+                <strong>⚠️ Warning:</strong> Production websites mein excessive alerts avoid karo. User experience kharab hota hai!
+            </div>
+        </div>
+
+        <!-- 3. CONFIRM BOX -->
+        <div class="section">
+            <h2>3️⃣ CONFIRM BOX - Yes/No Dialog</h2>
+            <p>User se confirmation lena ho. "OK" aur "Cancel" buttons hote hain.</p>
+
+            <h3>Syntax:</h3>
+            <div class="code-block">
+<span class="keyword">const</span> result = <span class="keyword">confirm</span>(<span class="string">"Are you sure?"</span>);
+<span class="comment">// Returns: true (OK) or false (Cancel)</span>
+            </div>
+
+            <h3>Example:</h3>
+            <div class="code-block">
+<span class="keyword">function</span> deleteAccount() {
+    <span class="keyword">const</span> confirmed = <span class="keyword">confirm</span>(<span class="string">"Are you sure you want to delete your account?\nThis action cannot be undone!"</span>);
+    
+    <span class="keyword">if</span> (confirmed) {
+        alert(<span class="string">"Account deleted successfully"</span>);
+        <span class="comment">// Send delete request to server</span>
+    } <span class="keyword">else</span> {
+        alert(<span class="string">"Account deletion cancelled"</span>);
+    }
+}
+
+<span class="comment">// Another example - File download</span>
+<span class="keyword">function</span> downloadFile() {
+    <span class="keyword">if</span> (<span class="keyword">confirm</span>(<span class="string">"Large file (500MB). Download now?"</span>)) {
+        <span class="comment">// Start download</span>
+        console.log(<span class="string">"Downloading..."</span>);
+    } <span class="keyword">else</span> {
+        console.log(<span class="string">"Download cancelled"</span>);
+    }
+}
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try Confirm Box:</h4>
+                <button onclick="testConfirm()">Delete Account</button>
+                <button onclick="confirmDownload()">Download File</button>
+                <button onclick="confirmLeave()">Leave Website</button>
+                <div id="confirmOutput" class="output" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- 4. PROMPT BOX -->
+        <div class="section">
+            <h2>4️⃣ PROMPT BOX - User Input Dialog</h2>
+            <p>User se input lena ho. Text field ke saath "OK" aur "Cancel" buttons.</p>
+
+            <h3>Syntax:</h3>
+            <div class="code-block">
+<span class="keyword">const</span> userInput = <span class="keyword">prompt</span>(<span class="string">"Ask something"</span>, <span class="string">"Default value"</span>);
+<span class="comment">// Returns: string or null</span>
+            </div>
+
+            <h3>Example:</h3>
+            <div class="code-block">
+<span class="keyword">function</span> askName() {
+    <span class="keyword">const</span> name = <span class="keyword">prompt</span>(<span class="string">"What's your name?"</span>, <span class="string">"John"</span>);
+    
+    <span class="keyword">if</span> (name !== <span class="keyword">null</span> && name.trim() !== <span class="string">""</span>) {
+        alert(<span class="string">`Hello, ${name}!`</span>);
+    } <span class="keyword">else</span> {
+        alert(<span class="string">"No name provided"</span>);
+    }
+}
+
+<span class="comment">// Another example - Age verification</span>
+<span class="keyword">function</span> checkAge() {
+    <span class="keyword">const</span> age = <span class="keyword">prompt</span>(<span class="string">"Enter your age:"</span>, <span class="string">"18"</span>);
+    
+    <span class="keyword">if</span> (age === <span class="keyword">null</span>) {
+        alert(<span class="string">"Cancelled"</span>);
+    } <span class="keyword">else</span> {
+        <span class="keyword">const</span> ageNum = parseInt(age);
+        <span class="keyword">if</span> (ageNum >= 18) {
+            alert(<span class="string">"Access granted"</span>);
+        } <span class="keyword">else</span> {
+            alert(<span class="string">"You must be 18+"</span>);
+        }
+    }
+}
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try Prompt Box:</h4>
+                <button onclick="askUserName()">Ask Name</button>
+                <button onclick="askAge()">Ask Age</button>
+                <button onclick="askEmail()">Ask Email</button>
+                <button onclick="askFeedback()">Ask Feedback</button>
+                <div id="promptOutput" class="output" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- 5. LOCATION OBJECT -->
+        <div class="section">
+            <h2>5️⃣ Location Object - URL Management</h2>
+            <p>Current URL ko access aur modify karte ho.</p>
+
+            <h3>Location Properties:</h3>
+            <table>
+                <tr>
+                    <th>Property</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>location.href</code></td>
+                    <td>Complete URL</td>
+                    <td>https://example.com/page</td>
+                </tr>
+                <tr>
+                    <td><code>location.protocol</code></td>
+                    <td>Protocol (http/https)</td>
+                    <td>https:</td>
+                </tr>
+                <tr>
+                    <td><code>location.hostname</code></td>
+                    <td>Domain name</td>
+                    <td>example.com</td>
+                </tr>
+                <tr>
+                    <td><code>location.pathname</code></td>
+                    <td>Path after domain</td>
+                    <td>/page</td>
+                </tr>
+                <tr>
+                    <td><code>location.search</code></td>
+                    <td>Query parameters</td>
+                    <td>?id=123&name=john</td>
+                </tr>
+            </table>
+
+            <h3>Methods:</h3>
+            <div class="code-block">
+location.reload();              <span class="comment">// Page refresh</span>
+location.replace(url);          <span class="comment">// Go to new URL (replace history)</span>
+location.assign(url);           <span class="comment">// Go to new URL (add to history)</span>
+location.href = <span class="string">"https://example.com"</span>;  <span class="comment">// Redirect</span>
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try Location Object:</h4>
+                <button onclick="showLocation()">Show Current URL Info</button>
+                <button onclick="reloadPage()">Reload Page</button>
+                <button onclick="goToGoogle()">Go to Google</button>
+                <div id="locationOutput" class="output"></div>
+            </div>
+        </div>
+
+        <!-- 6. HISTORY OBJECT -->
+        <div class="section">
+            <h2>6️⃣ History Object - Browser History</h2>
+            <p>Back, forward, aur go to specific page browser history se.</p>
+
+            <h3>Methods:</h3>
+            <div class="code-block">
+history.back();                 <span class="comment">// Go back (same as back button)</span>
+history.forward();              <span class="comment">// Go forward</span>
+history.go(n);                  <span class="comment">// Go to specific page (positive or negative)</span>
+
+<span class="comment">// Examples:</span>
+history.go(-1);                 <span class="comment">// Go back 1 page</span>
+history.go(2);                  <span class="comment">// Go forward 2 pages</span>
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try History:</h4>
+                <button onclick="goBack()">Go Back</button>
+                <button onclick="goForward()">Go Forward</button>
+                <button onclick="confirmHistoryLength()">Show History Length</button>
+            </div>
+        </div>
+
+        <!-- 7. NAVIGATOR OBJECT -->
+        <div class="section">
+            <h2>7️⃣ Navigator Object - Browser Information</h2>
+            <p>Browser aur device ke baare mein information.</p>
+
+            <h3>Common Properties:</h3>
+            <div class="code-block">
+navigator.appName;              <span class="comment">// Browser name</span>
+navigator.appVersion;           <span class="comment">// Browser version</span>
+navigator.userAgent;            <span class="comment">// Full browser info</span>
+navigator.platform;             <span class="comment">// OS (Win32, MacIntel, etc)</span>
+navigator.language;             <span class="comment">// Browser language</span>
+navigator.onLine;               <span class="comment">// Internet connection status</span>
+navigator.geolocation;          <span class="comment">// User location</span>
+navigator.cookieEnabled;        <span class="comment">// Cookies enabled or not</span>
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try Navigator:</h4>
+                <button onclick="showNavigatorInfo()">Show Browser Info</button>
+                <button onclick="checkConnection()">Check Internet</button>
+                <button onclick="checkCookies()">Check Cookies</button>
+                <div id="navigatorOutput" class="output"></div>
+            </div>
+        </div>
+
+        <!-- 8. SCREEN OBJECT -->
+        <div class="section">
+            <h2>8️⃣ Screen Object - Display Information</h2>
+            <p>Display screen ke dimensions aur colors ke baare mein.</p>
+
+            <h3>Properties:</h3>
+            <div class="code-block">
+screen.width;                   <span class="comment">// Screen width in pixels</span>
+screen.height;                  <span class="comment">// Screen height in pixels</span>
+screen.availWidth;              <span class="comment">// Available width (excluding taskbar)</span>
+screen.availHeight;             <span class="comment">// Available height</span>
+screen.colorDepth;              <span class="comment">// Color depth (bits per pixel)</span>
+screen.pixelDepth;              <span class="comment">// Pixel depth</span>
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try Screen:</h4>
+                <button onclick="showScreenInfo()">Show Screen Info</button>
+                <div id="screenOutput" class="output"></div>
+            </div>
+        </div>
+
+        <!-- 9. TIMERS -->
+        <div class="section">
+            <h2>9️⃣ Timers - setTimeout & setInterval</h2>
+            <p>Code ko delay se ya repeatedly execute karte ho.</p>
+
+            <h3>setTimeout - Ek baar execute:</h3>
+            <div class="code-block">
+<span class="keyword">const</span> timerId = <span class="keyword">setTimeout</span>(() => {
+    console.log(<span class="string">"This runs after 3 seconds"</span>);
+}, <span class="number">3000</span>);  <span class="comment">// 3000 milliseconds = 3 seconds</span>
+
+<span class="comment">// Cancel timeout</span>
+<span class="keyword">clearTimeout</span>(timerId);
+            </div>
+
+            <h3>setInterval - Repeatedly execute:</h3>
+            <div class="code-block">
+<span class="keyword">const</span> intervalId = <span class="keyword">setInterval</span>(() => {
+    console.log(<span class="string">"This runs every 2 seconds"</span>);
+}, <span class="number">2000</span>);
+
+<span class="comment">// Stop interval</span>
+<span class="keyword">clearInterval</span>(intervalId);
+            </div>
+
+            <h3>Real-World Examples:</h3>
+            <div class="code-block">
+<span class="comment">// Auto-save every 30 seconds</span>
+<span class="keyword">setInterval</span>(() => {
+    console.log(<span class="string">"Auto-saving..."</span>);
+}, <span class="number">30000</span>);
+
+<span class="comment">// Click button, then 2 sec baad redirect</span>
+<span class="keyword">function</span> submitForm() {
+    alert(<span class="string">"Form submitted!"</span>);
+    <span class="keyword">setTimeout</span>(() => {
+        location.href = <span class="string">"/success"</span>;
+    }, <span class="number">2000</span>);
+}
+            </div>
+
+            <div class="demo-section">
+                <h4>🎮 Try Timers:</h4>
+                <div style="margin-bottom: 15px;">
+                    <label>Output: <span id="timerOutput">0</span></label>
+                </div>
+                <button onclick="startTimeout()">Start Timeout (3 sec)</button>
+                <button onclick="startInterval()">Start Interval</button>
+                <button onclick="stopInterval()">Stop Interval</button>
+                <button onclick="stopAll()">Stop All</button>
+            </div>
+        </div>
+
+        <!-- 10. COMPARISON TABLE -->
+        <div class="section">
+            <h2>🔟 Alert Dialogs Comparison</h2>
+
+            <table>
+                <tr>
+                    <th>Dialog</th>
+                    <th>Buttons</th>
+                    <th>Returns</th>
+                    <th>Use Case</th>
+                </tr>
+                <tr>
+                    <td><strong>alert()</strong></td>
+                    <td>OK only</td>
+                    <td>-</td>
+                    <td>Information/notification</td>
+                </tr>
+                <tr>
+                    <td><strong>confirm()</strong></td>
+                    <td>OK, Cancel</td>
+                    <td>true/false</td>
+                    <td>Yes/No confirmation</td>
+                </tr>
+                <tr>
+                    <td><strong>prompt()</strong></td>
+                    <td>OK, Cancel</td>
+                    <td>string/null</td>
+                    <td>User input</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- REAL WORLD EXAMPLES -->
+        <div class="section">
+            <h2>🌟 Real-World Examples</h2>
+
+            <h3>Example 1: Login Validation</h3>
+            <div class="code-block">
+<span class="keyword">function</span> login() {
+    <span class="keyword">const</span> username = prompt(<span class="string">"Enter username:"</span>);
+    
+    <span class="keyword">if</span> (username === <span class="keyword">null</span>) {
+        alert(<span class="string">"Login cancelled"</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="keyword">if</span> (username.length &lt; 3) {
+        alert(<span class="string">"Username must be at least 3 chars"</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    alert(<span class="string">`Welcome, ${username}!`</span>);
+    <span class="keyword">setTimeout</span>(() => {
+        location.href = <span class="string">"/dashboard"</span>;
+    }, <span class="number">2000</span>);
+}
+            </div>
+
+            <div class="demo-section">
+                <button onclick="login()">Try Login Example</button>
+            </div>
+
+            <h3>Example 2: Confirm Action</h3>
+            <div class="code-block">
+<span class="keyword">function</span> deletePost(postId) {
+    <span class="keyword">const</span> confirmed = confirm(
+        <span class="string">`Delete post ${postId}?\nThis cannot be undone!`</span>
+    );
+    
+    <span class="keyword">if</span> (confirmed) {
+        alert(<span class="string">"Post deleted successfully"</span>);
+        <span class="comment">// Delete from server</span>
+    }
+}
+            </div>
+
+            <div class="demo-section">
+                <button onclick="deletePost(123)">Try Delete Example</button>
+            </div>
+
+            <h3>Example 3: Timer-based Popup</h3>
+            <div class="code-block">
+<span class="keyword">function</span> startPopupTimer() {
+    alert(<span class="string">"Survey popup will appear in 5 seconds..."</span>);
+    
+    <span class="keyword">setTimeout</span>(() => {
+        <span class="keyword">const</span> rating = prompt(
+            <span class="string">"Rate our website (1-10):"</span>,
+            <span class="string">"5"</span>
+        );
+        
+        <span class="keyword">if</span> (rating !== <span class="keyword">null</span>) {
+            alert(<span class="string">`Thank you! You rated us ${rating}/10`</span>);
+        }
+    }, <span class="number">5000</span>);
+}
+            </div>
+
+            <div class="demo-section">
+                <button onclick="startPopupTimer()">Try Timer Popup</button>
+            </div>
+        </div>
+
+        <!-- BEST PRACTICES -->
+        <div class="section">
+            <h2>✅ Best Practices</h2>
+
+            <h3>Kab Use Karo:</h3>
+            <div class="list-item">✅ Small notifications/alerts</div>
+            <div class="list-item">✅ Quick confirmations</div>
+            <div class="list-item">✅ Simple user input</div>
+
+            <h3>Kab Use Na Karo:</h3>
+            <div class="list-item">❌ Too many alerts (annoying)</div>
+            <div class="list_item">❌ Complex forms (use HTML forms instead)</div>
+            <div class="list-item">❌ Auto-triggering alerts</div>
+            <div class="list-item">❌ Production websites (outdated feel)</div>
+
+            <h3>Modern Alternative:</h3>
+            <div class="code-block">
+<span class="comment">// Instead of alert(), use custom modals/toasts</span>
+<span class="keyword">function</span> showNotification(message) {
+    <span class="keyword">const</span> notification = document.createElement(<span class="string">"div"</span>);
+    notification.textContent = message;
+    notification.style.cssText = <span class="string">`
+        position: fixed; top: 20px; right: 20px;
+        background: #667eea; color: white;
+        padding: 15px; border-radius: 4px;
+        z-index: 9999;
+    `</span>;
+    document.body.appendChild(notification);
+    
+    <span class="keyword">setTimeout</span>(() => notification.remove(), <span class="number">3000</span>);
+}
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <p><strong>📚 Remember:</strong> BOM browser-specific features deta hai. Servers par kaam nahi karta!</p>
+            <p style="margin-top: 15px; color: #0066cc;">Now you can interact with browser features! 🚀</p>
+        </footer>
+    </div>
+
+    <script>
+        // 1. Window Properties
+        function showWindowProperties() {
+            const output = document.getElementById('windowOutput');
+            const properties = `
+📐 WINDOW DIMENSIONS:
+- innerWidth: ${window.innerWidth}px
+- innerHeight: ${window.innerHeight}px
+- outerWidth: ${window.outerWidth}px
+- outerHeight: ${window.outerHeight}px
+
+📍 WINDOW POSITION:
+- screenX: ${window.screenX}px
+- screenY: ${window.screenY}px
+
+💾 BROWSER NAME: ${navigator.appName}
+🌐 DOCUMENT TITLE: ${document.title}
+            `;
+            output.textContent = properties;
+        }
+
+        // 2. ALERT EXAMPLES
+        function simpleAlert() {
+            alert('🎉 Simple Alert!\n\nThis is a basic alert box.');
+        }
+
+        function multilineAlert() {
+            alert('Welcome to My Website!\n\nFeatures:\n✅ Fast Loading\n✅ Responsive Design\n✅ User Friendly');
+        }
+
+        function welcomeAlert() {
+            const name = prompt('What\'s your name?', 'Guest');
+            if (name) {
+                alert(`👋 Welcome, ${name}!\n\nGlad to see you here!`);
+            }
+        }
+
+        function errorAlert() {
+            alert('❌ Error!\n\nSomething went wrong.\nPlease try again!');
+        }
+
+        function successAlert() {
+            alert('✅ Success!\n\nYour action completed successfully!');
+        }
+
+        // 3. CONFIRM BOX
+        function testConfirm() {
+            const confirmed = confirm('⚠️ Are you sure you want to delete your account?\n\nThis action CANNOT be undone!');
+            const output = document.getElementById('confirmOutput');
+            if (confirmed) {
+                output.textContent = '✅ Account deletion confirmed! (This is just a demo)';
+            } else {
+                output.textContent = '❌ Account deletion cancelled!';
+            }
+            output.style.display = 'block';
+        }
+
+        function confirmDownload() {
+            const confirmed = confirm('📥 Download file? (500MB)\n\nInternet required!');
+            const output = document.getElementById('confirmOutput');
+            if (confirmed) {
+                output.textContent = '⏳ Download starting...\n(Demo - not actual download)';
+            } else {
+                output.textContent = '❌ Download cancelled';
+            }
+            output.style.display = 'block';
+        }
+
+        function confirmLeave() {
+            const confirmed = confirm('Are you sure you want to leave?\n\nYou may lose unsaved changes!');
+            const output = document.getElementById('confirmOutput');
+            if (confirmed) {
+                output.textContent = '👋 Goodbye!';
+            } else {
+                output.textContent = '✅ Staying on page!';
+            }
+            output.style.display = 'block';
+        }
+
+        // 4. PROMPT BOX
+        function askUserName() {
+            const name = prompt('What\'s your full name?', 'John Doe');
+            const output = document.getElementById('promptOutput');
+            if (name !== null && name.trim() !== '') {
+                output.textContent = `👋 Hello, ${name}!\n\nNice to meet you!`;
+            } else if (name === null) {
+                output.textContent = '❌ You cancelled the prompt!';
+            } else {
+                output.textContent = '⚠️ Please enter a name!';
+            }
+            output.style.display = 'block';
+        }
+
+        function askAge() {
+            const age = prompt('How old are you?', '18');
+            const output = document.getElementById('promptOutput');
+            if (age === null) {
+                output.textContent = '❌ Cancelled';
+                output.style.display = 'block';
+                return;
+            }
+            const ageNum = parseInt(age);
+            if (isNaN(ageNum)) {
+                output.textContent = '⚠️ Please enter a valid number!';
+            } else if (ageNum < 0 || ageNum > 150) {
+                output.textContent = '⚠️ Please enter a realistic age!';
+            } else if (ageNum >= 18) {
+                output.textContent = `✅ Access granted! You are ${ageNum} years old.`;
+            } else {
+                output.textContent = `⚠️ You must be 18+. You are only ${ageNum}!`;
+            }
+            output.style.display = 'block';
+        }
+
+        function askEmail() {
+            const email = prompt('Enter your email:', 'user@email.com');
+            const output = document.getElementById('promptOutput');
+            if (email === null) {
+                output.textContent = '❌ Cancelled';
+            } else if (email.includes('@')) {
+                output.textContent = `✅ Email saved: ${email}`;
+            } else {
+                output.textContent = '⚠️ Invalid email format!';
+            }
+            output.style.display = 'block';
+        }
+
+        function askFeedback() {
+            const feedback = prompt('How was your experience? (1-10)', '8');
+            const output = document.getElementById('promptOutput');
+            if (feedback === null) {
+                output.textContent = '❌ Thank you anyway!';
+            } else {
+                output.textContent = `📊 Your rating: ${feedback}/10\n\nThank you for your feedback!`;
+            }
+            output.style.display = 'block';
+        }
+
+        // 5. LOCATION
+        function showLocation() {
+            const output = document.getElementById('locationOutput');
+            output.textContent = `
+🌐 CURRENT PAGE INFO:
+- Full URL: ${location.href}
+- Protocol: ${location.protocol}
+- Hostname: ${location.hostname}
+- Pathname: ${location.pathname}
+- Search: ${location.search || '(no parameters)'}
+- Hash: ${location.hash || '(no hash)'}
+            `;
+        }
+
+        function reloadPage() {
+            if (confirm('Reload this page?')) {
+                location.reload();
+            }
+        }
+
+        function goToGoogle() {
+            if (confirm('Go to Google.com?')) {
+                window.open('https://www.google.com', '_blank');
+            }
+        }
+
+        // 6. HISTORY
+        function goBack() {
+            alert('Going back...');
+            history.back();
+        }
+
+        function goForward() {
+            alert('Going forward...');
+            history.forward();
+        }
+
+        function confirmHistoryLength() {
+            alert(`📜 Browser history has ${history.length} entries`);
+        }
+
+        // 7. NAVIGATOR
+        function showNavigatorInfo() {
+            const output = document.getElementById('navigatorOutput');
+            output.textContent = `
+🌐 BROWSER INFORMATION:
+- App Name: ${navigator.appName}
+- User Agent: ${navigator.userAgent}
+- Platform: ${navigator.platform}
+- Language: ${navigator.language}
+- Online: ${navigator.onLine ? '✅ Yes' : '❌ No'}
+- Cookies Enabled: ${navigator.cookieEnabled ? '✅ Yes' : '❌ No'}
+            `;
+        }
+
+        function checkConnection() {
+            const output = document.getElementById('navigatorOutput');
+            if (navigator.onLine) {
+                output.textContent = '✅ You are ONLINE!';
+            } else {
+                output.textContent = '❌ You are OFFLINE!';
+            }
+        }
+
+        function checkCookies() {
+            const output = document.getElementById('navigatorOutput');
+            if (navigator.cookieEnabled) {
+                output.textContent = '✅ Cookies are ENABLED';
+            } else {
+                output.textContent = '❌ Cookies are DISABLED';
+            }
+        }
+
+        // 8. SCREEN
+        function showScreenInfo() {
+            const output = document.getElementById('screenOutput');
+            output.textContent = `
+📺 SCREEN INFORMATION:
+- Screen Width: ${screen.width}px
+- Screen Height: ${screen.height}px
+- Available Width: ${screen.availWidth}px
+- Available Height: ${screen.availHeight}px
+- Color Depth: ${screen.colorDepth} bits
+- Pixel Depth: ${screen.pixelDepth} bits
+            `;
+        }
+
+        // 9. TIMERS
+        let intervalId = null;
+        let timerCount = 0;
+
+        function startTimeout() {
+            alert('⏱️ 3 second timeout started!');
+            setTimeout(() => {
+                alert('✅ Timeout completed!');
+            }, 3000);
+        }
+
+        function startInterval() {
+            if (intervalId) {
+                alert('⚠️ Interval already running!');
+                return;
+            }
+            timerCount = 0;
+            alert('🔄 Interval started! Counting...');
+            intervalId = setInterval(() => {
+                timerCount++;
+                document.getElementById('timerOutput').textContent = timerCount;
+            }, 1000);
+        }
+
+        function stopInterval() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+                alert(`✅ Stopped at ${timerCount} seconds!`);
+            } else {
+                alert('⚠️ No interval running!');
+            }
+        }
+
+        function stopAll() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            alert('🛑 All timers stopped!');
+        }
+
+        // 10. REAL WORLD EXAMPLES
+        function login() {
+            const username = prompt('Enter username:', 'john123');
+            if (username === null) {
+                alert('Login cancelled');
+                return;
+            }
+            if (username.length < 3) {
+                alert('Username must be at least 3 characters!');
+                return;
+            }
+            alert(`✅ Welcome, ${username}!\n\nRedirecting in 2 seconds...`);
+            setTimeout(() => {
+                alert('(Would redirect to dashboard)');
+            }, 2000);
+        }
+
+        function deletePost(postId) {
+            const confirmed = confirm(`🗑️ Delete post #${postId}?\n\nThis CANNOT be undone!`);
+            if (confirmed) {
+                alert('✅ Post deleted successfully!');
+            } else {
+                alert('❌ Deletion cancelled');
+            }
+        }
+
+        function startPopupTimer() {
+            alert('⏰ Survey popup will appear in 5 seconds...');
+            setTimeout(() => {
+                const rating = prompt('Rate our website:\n(1-10)', '5');
+                if (rating !== null) {
+                    alert(`📊 Thank you! You rated us ${rating}/10`);
+                }
+            }, 5000);
+        }
+
+        console.log('%c🌐 BOM & Alert Boxes Guide Loaded!', 'color: #667eea; font-size: 16px; font-weight: bold;');
+    </script>
+</body>
+</html>

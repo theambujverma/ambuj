@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async/Await and API Calls</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0052a3;
+        }
+        .loading {
+            color: #0066cc;
+            font-style: italic;
+        }
+        .error {
+            color: #cc0000;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #00aa00;
+            background: #e6ffe6;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .data-display {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .user-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .post-item {
+            background: #e6f2ff;
+            padding: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #0066cc;
+            border-radius: 4px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Async/Await and API Calls</h1>
+
+        <!-- DEMO 1: Promises -->
+        <div class="demo-section">
+            <h3>1. Understanding Promises</h3>
+            <button onclick="demonstratePromise()">Execute Promise</button>
+            <div id="promiseOutput"></div>
+        </div>
+
+        <!-- DEMO 2: Async/Await -->
+        <div class="demo-section">
+            <h3>2. Async/Await Basic Example</h3>
+            <button onclick="asyncExample()">Run Async Function</button>
+            <div id="asyncOutput"></div>
+        </div>
+
+        <!-- DEMO 3: Fetch API - Get User Data -->
+        <div class="demo-section">
+            <h3>3. Fetch User Data from API</h3>
+            <input type="number" id="userId" placeholder="Enter User ID (1-10)" min="1" max="10" value="1">
+            <button onclick="fetchUserData()">Fetch User</button>
+            <div id="userOutput"></div>
+        </div>
+
+        <!-- DEMO 4: Fetch Posts -->
+        <div class="demo-section">
+            <h3>4. Fetch Posts (Multiple Items)</h3>
+            <input type="number" id="postCount" placeholder="Number of posts" min="1" max="10" value="3">
+            <button onclick="fetchPosts()">Fetch Posts</button>
+            <div id="postsOutput"></div>
+        </div>
+
+        <!-- DEMO 5: Error Handling -->
+        <div class="demo-section">
+            <h3>5. Error Handling in Async Functions</h3>
+            <button onclick="fetchWithErrorHandling()">Try Fetch (May Fail)</button>
+            <div id="errorHandlingOutput"></div>
+        </div>
+
+        <!-- DEMO 6: Parallel API Calls -->
+        <div class="demo-section">
+            <h3>6. Parallel API Calls (Promise.all)</h3>
+            <button onclick="fetchMultipleData()">Fetch Multiple Data</button>
+            <div id="parallelOutput"></div>
+        </div>
+
+        <!-- DEMO 7: Sequential API Calls -->
+        <div class="demo-section">
+            <h3>7. Sequential API Calls</h3>
+            <button onclick="sequentialCalls()">Fetch Data Sequentially</button>
+            <div id="sequentialOutput"></div>
+        </div>
+
+        <!-- DEMO 8: Retry Logic -->
+        <div class="demo-section">
+            <h3>8. Retry Logic with Exponential Backoff</h3>
+            <button onclick="fetchWithRetry()">Fetch with Retry</button>
+            <div id="retryOutput"></div>
+        </div>
+
+        <!-- DEMO 9: Create Mock API -->
+        <div class="demo-section">
+            <h3>9. Mock API Simulation</h3>
+            <button onclick="mockAPICall()">Call Mock API</button>
+            <div id="mockOutput"></div>
+        </div>
+
+        <!-- DEMO 10: Real-world Example - Search Products -->
+        <div class="demo-section">
+            <h3>10. Real-world: Search Products</h3>
+            <input type="text" id="searchTerm" placeholder="Search products (Electronics, Clothing, Books)">
+            <button onclick="searchProducts()">Search</button>
+            <div id="searchOutput"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PROMISES AND ASYNC/AWAIT
+        // ============================================
+
+        // 1. UNDERSTANDING PROMISES
+        function demonstratePromise() {
+            const output = document.getElementById("promiseOutput");
+            output.innerHTML = '<p class="loading">Processing...</p>';
+
+            // Create a promise that resolves after 2 seconds
+            const promise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve("Promise resolved successfully!");
+                }, 2000);
+            });
+
+            promise.then(result => {
+                output.innerHTML = `<p class="success">${result}</p>`;
+            }).catch(error => {
+                output.innerHTML = `<p class="error">Error: ${error}</p>`;
+            });
+        }
+
+        // 2. ASYNC/AWAIT EXAMPLE
+        async function asyncExample() {
+            const output = document.getElementById("asyncOutput");
+            output.innerHTML = '<p class="loading">Running async function...</p>';
+
+            try {
+                // Simulate API call
+                const result = await new Promise(resolve => {
+                    setTimeout(() => resolve("Async function completed!"), 2000);
+                });
+
+                output.innerHTML = `<p class="success">${result}</p>`;
+            } catch (error) {
+                output.innerHTML = `<p class="error">Error: ${error}</p>`;
+            }
+        }
+
+        // ============================================
+        // FETCH API - Real API Calls
+        // ============================================
+
+        // 3. FETCH USER DATA
+        async function fetchUserData() {
+            const userId = document.getElementById("userId").value;
+            const output = document.getElementById("userOutput");
+
+            if (!userId) {
+                output.innerHTML = '<p class="error">Please enter a user ID</p>';
+                return;
+            }
+
+            output.innerHTML = '<p class="loading">Loading user data...</p>';
+
+            try {
+                // Using JSONPlaceholder - Free fake API
+                const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const user = await response.json();
+
+                output.innerHTML = `
+                    <div class="user-card">
+                        <h4>${user.name}</h4>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Username:</strong> @${user.username}</p>
+                        <p><strong>Company:</strong> ${user.company.name}</p>
+                        <p><strong>Website:</strong> ${user.website}</p>
+                    </div>
+                `;
+
+                console.log("User data:", user);
+            } catch (error) {
+                output.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+                console.error("Fetch error:", error);
+            }
+        }
+
+        // 4. FETCH MULTIPLE POSTS
+        async function fetchPosts() {
+            const count = document.getElementById("postCount").value;
+            const output = document.getElementById("postsOutput");
+
+            output.innerHTML = '<p class="loading">Loading posts...</p>';
+
+            try {
+                const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=${count}`);
+
+                if (!response.ok) throw new Error("Failed to fetch posts");
+
+                const posts = await response.json();
+
+                let html = `<p><strong>Fetched ${posts.length} posts:</strong></p>`;
+                posts.forEach(post => {
+                    html += `
+                        <div class="post-item">
+                            <strong>${post.title}</strong>
+                            <p>${post.body}</p>
+                            <small>User ID: ${post.userId} | Post ID: ${post.id}</small>
+                        </div>
+                    `;
+                });
+
+                output.innerHTML = html;
+            } catch (error) {
+                output.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+
+        // 5. ERROR HANDLING
+        async function fetchWithErrorHandling() {
+            const output = document.getElementById("errorHandlingOutput");
+            output.innerHTML = '<p class="loading">Attempting fetch with error handling...</p>';
+
+            try {
+                // Try to fetch from a potentially failing endpoint
+                const response = await fetch("https://jsonplaceholder.typicode.com/invalid-endpoint");
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                output.innerHTML = `<p class="success">Success: ${JSON.stringify(data)}</p>`;
+            } catch (error) {
+                output.innerHTML = `<p class="error"><strong>Caught Error:</strong> ${error.message}</p>`;
+                console.error("Error details:", error);
+            }
+        }
+
+        // 6. PARALLEL API CALLS - Promise.all
+        async function fetchMultipleData() {
+            const output = document.getElementById("parallelOutput");
+            output.innerHTML = '<p class="loading">Fetching from multiple endpoints...</p>';
+
+            try {
+                // Fetch from 3 different endpoints simultaneously
+                const [user, posts, comments] = await Promise.all([
+                    fetch("https://jsonplaceholder.typicode.com/users/1").then(r => r.json()),
+                    fetch("https://jsonplaceholder.typicode.com/posts?userId=1&_limit=2").then(r => r.json()),
+                    fetch("https://jsonplaceholder.typicode.com/comments?postId=1&_limit=2").then(r => r.json())
+                ]);
+
+                output.innerHTML = `
+                    <div class="success">
+                        <h4>✓ All data fetched successfully!</h4>
+                        <p><strong>User:</strong> ${user.name}</p>
+                        <p><strong>Posts fetched:</strong> ${posts.length}</p>
+                        <p><strong>Comments fetched:</strong> ${comments.length}</p>
+                        <p>This used Promise.all() to fetch all in parallel</p>
+                    </div>
+                `;
+            } catch (error) {
+                output.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+
+        // 7. SEQUENTIAL API CALLS
+        async function sequentialCalls() {
+            const output = document.getElementById("sequentialOutput");
+            output.innerHTML = '<p class="loading">Fetching data sequentially...</p>';
+
+            try {
+                // Fetch user first
+                const userResponse = await fetch("https://jsonplaceholder.typicode.com/users/1");
+                const user = await userResponse.json();
+
+                // Then fetch their posts
+                const postsResponse = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${user.id}&_limit=2`);
+                const posts = await postsResponse.json();
+
+                // Then fetch comments on first post
+                const commentsResponse = await fetch(`https://jsonplaceholder.typicode.com/comments?postId=${posts[0].id}&_limit=2`);
+                const comments = await commentsResponse.json();
+
+                output.innerHTML = `
+                    <div class="success">
+                        <h4>Sequential Call Complete</h4>
+                        <p>Step 1: Loaded user - <strong>${user.name}</strong></p>
+                        <p>Step 2: Loaded ${posts.length} posts from this user</p>
+                        <p>Step 3: Loaded ${comments.length} comments on first post</p>
+                    </div>
+                `;
+            } catch (error) {
+                output.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+
+        // 8. RETRY LOGIC
+        async function fetchWithRetry(url = "https://jsonplaceholder.typicode.com/users/1", maxRetries = 3) {
+            const output = document.getElementById("retryOutput");
+            output.innerHTML = '<p class="loading">Fetching with retry logic...</p>';
+
+            let lastError;
+
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    output.innerHTML = `<p class="loading">Attempt ${attempt}/${maxRetries}...</p>`;
+
+                    const response = await fetch(url);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    output.innerHTML = `
+                        <div class="success">
+                            <p>✓ Success on attempt ${attempt}</p>
+                            <p><strong>Data received:</strong> ${data.name || data[0].name}</p>
+                        </div>
+                    `;
+                    return;
+                } catch (error) {
+                    lastError = error;
+                    if (attempt < maxRetries) {
+                        // Wait before retrying (exponential backoff)
+                        await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+                    }
+                }
+            }
+
+            output.innerHTML = `<p class="error">Failed after ${maxRetries} attempts: ${lastError.message}</p>`;
+        }
+
+        // 9. MOCK API SIMULATION
+        function mockAPI(action) {
+            return new Promise((resolve, reject) => {
+                // Simulate API delay
+                setTimeout(() => {
+                    if (action === "success") {
+                        resolve({
+                            status: "success",
+                            data: { id: 1, name: "John", email: "john@example.com" },
+                            timestamp: new Date().toLocaleString()
+                        });
+                    } else if (action === "error") {
+                        reject({ message: "API Error: Simulated failure" });
+                    }
+                }, 1500);
+            });
+        }
+
+        async function mockAPICall() {
+            const output = document.getElementById("mockOutput");
+            output.innerHTML = '<p class="loading">Calling mock API...</p>';
+
+            try {
+                const result = await mockAPI("success");
+                output.innerHTML = `
+                    <div class="success">
+                        <p><strong>Mock API Response:</strong></p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                output.innerHTML = `<p class="error">API Error: ${error.message}</p>`;
+            }
+        }
+
+        // 10. REAL-WORLD EXAMPLE - SEARCH PRODUCTS
+        const mockProducts = [
+            { id: 1, name: "Laptop", category: "Electronics", price: 50000 },
+            { id: 2, name: "Mouse", category: "Electronics", price: 1500 },
+            { id: 3, name: "Monitor", category: "Electronics", price: 15000 },
+            { id: 4, name: "T-Shirt", category: "Clothing", price: 500 },
+            { id: 5, name: "Jeans", category: "Clothing", price: 1200 },
+            { id: 6, name: "JavaScript Book", category: "Books", price: 450 }
+        ];
+
+        async function searchProducts() {
+            const searchTerm = document.getElementById("searchTerm").value.toLowerCase();
+            const output = document.getElementById("searchOutput");
+
+            if (!searchTerm) {
+                output.innerHTML = '<p class="error">Please enter a search term</p>';
+                return;
+            }
+
+            output.innerHTML = '<p class="loading">Searching products...</p>';
+
+            // Simulate API call with delay
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            const results = mockProducts.filter(product =>
+                product.name.toLowerCase().includes(searchTerm) ||
+                product.category.toLowerCase().includes(searchTerm)
+            );
+
+            if (results.length === 0) {
+                output.innerHTML = `<p class="error">No products found for "${searchTerm}"</p>`;
+            } else {
+                let html = `<p class="success">Found ${results.length} product(s):</p>`;
+                results.forEach(product => {
+                    html += `
+                        <div class="post-item">
+                            <strong>${product.name}</strong>
+                            <p>Category: ${product.category} | Price: Rs ${product.price}</p>
+                        </div>
+                    `;
+                });
+                output.innerHTML = html;
+            }
+
+            console.log("Search results:", results);
+        }
+
+        console.log("Async/Await examples loaded!");
+    </script>
+</body>
+</html>

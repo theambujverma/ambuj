@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced JavaScript Concepts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0052a3;
+        }
+        .output {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .success {
+            color: #00aa00;
+            background: #e6ffe6;
+        }
+        .error {
+            color: #cc0000;
+            background: #ffe6e6;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #0066cc;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Advanced JavaScript Concepts</h1>
+
+        <!-- DEMO 1: Closures -->
+        <div class="demo-section">
+            <h3>1. Closures - Encapsulation</h3>
+            <button onclick="demonstrateClosures()">Show Closures</button>
+            <div id="closuresOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 2: This Keyword -->
+        <div class="demo-section">
+            <h3>2. This Keyword in Different Contexts</h3>
+            <button onclick="demonstrateThis()">Explain 'this'</button>
+            <div id="thisOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 3: Error Handling -->
+        <div class="demo-section">
+            <h3>3. Try-Catch Error Handling</h3>
+            <button onclick="nullPointerError()">Cause Error</button>
+            <button onclick="userInputError()">Handle Input Error</button>
+            <div id="errorOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 4: Local Storage -->
+        <div class="demo-section">
+            <h3>4. Local Storage - Persistent Data</h3>
+            <input type="text" id="dataInput" placeholder="Enter data to save">
+            <button onclick="saveToStorage()">Save</button>
+            <button onclick="retrieveFromStorage()">Retrieve</button>
+            <button onclick="clearStorage()">Clear</button>
+            <div id="storageOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 5: JSON Operations -->
+        <div class="demo-section">
+            <h3>5. JSON - Data Format</h3>
+            <button onclick="demonstrateJSON()">JSON Example</button>
+            <div id="jsonOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 6: Set and Map -->
+        <div class="demo-section">
+            <h3>6. Set and Map - Data Structures</h3>
+            <button onclick="demonstrateSetAndMap()">Show Sets & Maps</button>
+            <div id="setMapOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 7: Callback Hell Prevention -->
+        <div class="demo-section">
+            <h3>7. Callback Hell vs Async/Await</h3>
+            <button onclick="showCallbackHell()">Callback Hell</button>
+            <button onclick="showAsyncAwait()">Async/Await (Better)</button>
+            <div id="callbackOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 8: Debugging Techniques -->
+        <div class="demo-section">
+            <h3>8. Debugging & Console Methods</h3>
+            <button onclick="demonstrateDebugging()">Show Debugging</button>
+            <div id="debugOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 9: Performance Tips -->
+        <div class="demo-section">
+            <h3>9. Performance Optimization</h3>
+            <button onclick="performanceDemo()">Show Performance Tips</button>
+            <div id="performanceOutput" class="output"></div>
+        </div>
+
+        <!-- DEMO 10: Best Practices -->
+        <div class="demo-section">
+            <h3>10. Best Practices & Patterns</h3>
+            <button onclick="bestPractices()">Learn Best Practices</button>
+            <div id="bestPracticesOutput" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ADVANCED JAVASCRIPT CONCEPTS
+        // ============================================
+
+        // 1. CLOSURES - Function inside function with access to outer scope
+        function demonstrateClosures() {
+            const output = document.getElementById("closuresOutput");
+
+            // Example 1: Encapsulation - Private variable
+            function createCounter() {
+                let count = 0; // Private variable
+                return {
+                    increment: function() { return ++count; },
+                    decrement: function() { return --count; },
+                    getCount: function() { return count; }
+                };
+            }
+
+            const counter = createCounter();
+            console.log("Counter created");
+
+            let result = `CLOSURES - Private Variables\n\n`;
+            result += `counter.increment() = ${counter.increment()}\n`;
+            result += `counter.increment() = ${counter.increment()}\n`;
+            result += `counter.decrement() = ${counter.decrement()}\n`;
+            result += `counter.getCount() = ${counter.getCount()}\n\n`;
+
+            // Example 2: Function Factory
+            function makeMultiplier(multiplier) {
+                return function(number) {
+                    return number * multiplier;
+                };
+            }
+
+            const double = makeMultiplier(2);
+            const triple = makeMultiplier(3);
+
+            result += `FUNCTION FACTORY\n\n`;
+            result += `double(5) = ${double(5)}\n`;
+            result += `triple(5) = ${triple(5)}\n\n`;
+
+            // Example 3: Real-world: User authentication
+            function createUser(username, password) {
+                let authenticated = false;
+                return {
+                    login: function(pwd) {
+                        if (pwd === password) {
+                            authenticated = true;
+                            return "Login successful";
+                        }
+                        return "Invalid password";
+                    },
+                    logout: function() {
+                        authenticated = false;
+                        return "Logged out";
+                    },
+                    isAuthenticated: function() {
+                        return authenticated;
+                    }
+                };
+            }
+
+            const user = createUser("john", "secret123");
+            result += `REAL-WORLD: User Authentication\n\n`;
+            result += `${user.login("secret123")}\n`;
+            result += `Is authenticated: ${user.isAuthenticated()}\n`;
+
+            output.textContent = result;
+            output.className = "output success";
+        }
+
+        // 2. THIS KEYWORD
+        function demonstrateThis() {
+            const output = document.getElementById("thisOutput");
+
+            let result = `THE 'THIS' KEYWORD\n\n`;
+
+            // Example 1: In global context
+            result += `1. Global Context:\n`;
+            result += `typeof this = ${typeof window}\n\n`;
+
+            // Example 2: In object
+            const user = {
+                name: "John",
+                age: 25,
+                getInfo: function() {
+                    return `${this.name} is ${this.age} years old`;
+                }
+            };
+
+            result += `2. In Object Method:\n`;
+            result += `${user.getInfo()}\n\n`;
+
+            // Example 3: In function
+            function showThis() {
+                return `In function: this = window`;
+            }
+            result += `3. In Regular Function:\n`;
+            result += `${showThis()}\n\n`;
+
+            // Example 4: Arrow function (inherits this)
+            const obj = {
+                name: "Object",
+                regularFunc: function() {
+                    return this.name; // "Object"
+                },
+                arrowFunc: () => {
+                    return this.name; // undefined (inherits from outer scope)
+                }
+            };
+
+            result += `4. Arrow Function vs Regular Function:\n`;
+            result += `Regular function 'this': ${obj.regularFunc()}\n`;
+            result += `Arrow function 'this': ${obj.arrowFunc()}\n\n`;
+
+            // Example 5: In constructor
+            function Person(name) {
+                this.name = name;
+            }
+            const person = new Person("Alice");
+
+            result += `5. In Constructor (new):\n`;
+            result += `person.name = ${person.name}`;
+
+            output.textContent = result;
+            output.className = "output success";
+        }
+
+        // 3. ERROR HANDLING
+        function nullPointerError() {
+            const output = document.getElementById("errorOutput");
+
+            try {
+                let data = null;
+                // This will throw an error
+                data.length; // Cannot read property of null
+
+                output.textContent = "This won't execute";
+            } catch (error) {
+                output.textContent = `ERROR CAUGHT!\n\n`;
+                output.textContent += `Type: ${error.name}\n`;
+                output.textContent += `Message: ${error.message}\n\n`;
+                output.textContent += `Stack: ${error.stack}`;
+                output.className = "output error";
+            }
+        }
+
+        function userInputError() {
+            const output = document.getElementById("errorOutput");
+            const input = prompt("Enter a number:");
+
+            try {
+                const num = parseFloat(input);
+                
+                if (isNaN(num)) {
+                    throw new Error("Input is not a valid number");
+                }
+
+                if (num < 0) {
+                    throw new Error("Number cannot be negative");
+                }
+
+                output.textContent = `✓ Valid input: ${num}`;
+                output.className = "output success";
+            } catch (error) {
+                output.textContent = `✗ Error: ${error.message}`;
+                output.className = "output error";
+            } finally {
+                output.textContent += "\n(Finally block always executes)";
+            }
+        }
+
+        // 4. LOCAL STORAGE
+        function saveToStorage() {
+            const input = document.getElementById("dataInput").value;
+            const output = document.getElementById("storageOutput");
+
+            if (!input) {
+                output.textContent = "Please enter data";
+                output.className = "output error";
+                return;
+            }
+
+            localStorage.setItem("userData", input);
+            output.textContent = `✓ Saved: "${input}"\n\nData persists even after refresh`;
+            output.className = "output success";
+        }
+
+        function retrieveFromStorage() {
+            const output = document.getElementById("storageOutput");
+            const data = localStorage.getItem("userData");
+
+            if (data) {
+                output.textContent = `✓ Retrieved: "${data}"\n\nAll localStorage items:\n`;
+                output.textContent += `${localStorage.length} items stored`;
+                output.className = "output success";
+            } else {
+                output.textContent = "No data in local storage";
+                output.className = "output error";
+            }
+        }
+
+        function clearStorage() {
+            const output = document.getElementById("storageOutput");
+            localStorage.clear();
+            output.textContent = "✓ Local storage cleared";
+            output.className = "output success";
+        }
+
+        // 5. JSON
+        function demonstrateJSON() {
+            const output = document.getElementById("jsonOutput");
+
+            const user = {
+                id: 1001,
+                name: "John Doe",
+                email: "john@gmail.com",
+                roles: ["user", "admin"],
+                isActive: true
+            };
+
+            let result = `ORIGINAL OBJECT:\n`;
+            result += `name: ${user.name}\n`;
+            result += `email: ${user.email}\n\n`;
+
+            // Convert to JSON string
+            const jsonString = JSON.stringify(user, null, 2);
+            result += `JSON.stringify(user, null, 2):\n`;
+            result += jsonString + "\n\n";
+
+            // Parse back to object
+            const parsed = JSON.parse(jsonString);
+            result += `JSON.parse():\n`;
+            result += `Parsed name: ${parsed.name}`;
+
+            output.textContent = result;
+            output.className = "output success";
+        }
+
+        // 6. SET AND MAP
+        function demonstrateSetAndMap() {
+            const output = document.getElementById("setMapOutput");
+
+            let result = `SET - Unique values\n`;
+            result += `-------------------\n`;
+
+            const numbers = [1, 2, 2, 3, 3, 4, 4, 5];
+            const uniqueNumbers = new Set(numbers);
+
+            result += `Original array: [${numbers}]\n`;
+            result += `After Set: [${[...uniqueNumbers]}]\n`;
+            result += `Size: ${uniqueNumbers.size}\n\n`;
+
+            result += `MAP - Key-value pairs\n`;
+            result += `--------------------\n`;
+
+            const map = new Map();
+            map.set("name", "John");
+            map.set("age", 25);
+            map.set("email", "john@gmail.com");
+
+            result += `map.size: ${map.size}\n`;
+            result += `map.get("name"): ${map.get("name")}\n`;
+            result += `map.has("age"): ${map.has("age")}\n\n`;
+
+            result += `All entries:\n`;
+            for (const [key, value] of map) {
+                result += `  ${key}: ${value}\n`;
+            }
+
+            output.textContent = result;
+            output.className = "output success";
+        }
+
+        // 7. CALLBACK HELL VS ASYNC/AWAIT
+        function showCallbackHell() {
+            const output = document.getElementById("callbackOutput");
+
+            let result = `CALLBACK HELL (Pyramid of Doom):\n`;
+            result += `================================\n\n`;
+
+            result += `function processOrder(orderId, callback) {\n`;
+            result += `  getUser(userId, function(user) {\n`;
+            result += `    getProduct(productId, function(product) {\n`;
+            result += `      calculatePrice(product, function(price) {\n`;
+            result += `        processPayment(price, function(result) {\n`;
+            result += `          // This is callback hell!\n`;
+            result += `        });\n`;
+            result += `      });\n`;
+            result += `    });\n`;
+            result += `  });\n`;
+            result += `}\n\n`;
+
+            result += `Problems:\n`;
+            result += `- Hard to read\n`;
+            result += `- Error handling is difficult\n`;
+            result += `- Callback for every operation`;
+
+            output.textContent = result;
+            output.className = "output error";
+        }
+
+        function showAsyncAwait() {
+            const output = document.getElementById("callbackOutput");
+
+            let result = `ASYNC/AWAIT (Much Better!):\n`;
+            result += `===========================\n\n`;
+
+            result += `async function processOrder(orderId) {\n`;
+            result += `  try {\n`;
+            result += `    const user = await getUser(userId);\n`;
+            result += `    const product = await getProduct(productId);\n`;
+            result += `    const price = await calculatePrice(product);\n`;
+            result += `    const result = await processPayment(price);\n`;
+            result += `    return result;\n`;
+            result += `  } catch (error) {\n`;
+            result += `    console.error("Error:", error);\n`;
+            result += `  }\n`;
+            result += `}\n\n`;
+
+            result += `Benefits:\n`;
+            result += `✓ Reads like synchronous code\n`;
+            result += `✓ Easy error handling with try-catch\n`;
+            result += `✓ Better for readability`;
+
+            output.textContent = result;
+            output.className = "output success";
+        }
+
+        // 8. DEBUGGING
+        function demonstrateDebugging() {
+            const output = document.getElementById("debugOutput");
+
+            let result = `DEBUGGING TECHNIQUES:\n`;
+            result += `====================\n\n`;
+
+            result += `1. console.log() - Basic logging\n`;
+            result += `2. console.error() - Error messages\n`;
+            result += `3. console.warn() - Warnings\n`;
+            result += `4. console.table() - Table format\n`;
+            result += `5. console.time() - Performance\n\n`;
+
+            // Example
+            const data = { name: "John", age: 25, email: "john@gmail.com" };
+            result += `Table example data:\n`;
+            result += `${JSON.stringify(data, null, 2)}\n\n`;
+
+            // Performance
+            console.time("performance-test");
+            let sum = 0;
+            for (let i = 0; i < 1000000; i++) sum += i;
+            console.timeEnd("performance-test");
+
+            result += `Use console.time() for performance\n`;
+            result += `Check browser DevTools for more`;
+
+            output.textContent = result;
+            output.className = "output success";
+
+            // Actually log to console
+            console.log("Debugging example:", data);
+            console.table(data);
+        }
+
+        // 9. PERFORMANCE
+        function performanceDemo() {
+            const output = document.getElementById("performanceOutput");
+
+            let result = `PERFORMANCE OPTIMIZATION:\n`;
+            result += `========================\n\n`;
+
+            result += `1. USE CONST/LET INSTEAD OF VAR\n`;
+            result += `   - Block-scoped\n`;
+            result += `   - Prevents hoisting issues\n\n`;
+
+            result += `2. AVOID GLOBAL VARIABLES\n`;
+            result += `   - Use modules or closures\n`;
+            result += `   - Prevent naming conflicts\n\n`;
+
+            result += `3. CACHE DOM QUERIES\n`;
+            result += `   // Bad\n`;
+            result += `   for (let i = 0; i < 100; i++) {\n`;
+            result += `     document.getElementById('id').innerHTML += i;\n`;
+            result += `   }\n`;
+            result += `   // Good\n`;
+            result += `   const el = document.getElementById('id');\n`;
+            result += `   for (let i = 0; i < 100; i++) {\n`;
+            result += `     el.innerHTML += i;\n`;
+            result += `   }\n\n`;
+
+            result += `4. USE DELEGATION FOR EVENTS\n`;
+            result += `   - One listener instead of many\n\n`;
+
+            result += `5. LAZY LOADING\n`;
+            result += `   - Load data only when needed\n\n`;
+
+            result += `6. DEBOUNCE/THROTTLE\n`;
+            result += `   - Limit function calls`;
+
+            output.textContent = result;
+            output.className = "output success";
+        }
+
+        // 10. BEST PRACTICES
+        function bestPractices() {
+            const output = document.getElementById("bestPracticesOutput");
+
+            let result = `BEST PRACTICES & PATTERNS:\n`;
+            result += `=========================\n\n`;
+
+            result += `1. NAMING CONVENTIONS\n`;
+            result += `   - Functions: camelCase (getData)\n`;
+            result += `   - Classes: PascalCase (UserClass)\n`;
+            result += `   - Constants: UPPER_CASE (MAX_USERS)\n\n`;
+
+            result += `2. CODE COMMENTS\n`;
+            result += `   // For simple explanations\n`;
+            result += `   /** For functions **/\n\n`;
+
+            result += `3. MODULAR CODE\n`;
+            result += `   - Small, focused functions\n`;
+            result += `   - Single responsibility\n`;
+            result += `   - Reusable components\n\n`;
+
+            result += `4. DRY (Don't Repeat Yourself)\n`;
+            result += `   - Extract common logic\n`;
+            result += `   - Use functions and loops\n\n`;
+
+            result += `5. INPUT VALIDATION\n`;
+            result += `   - Always validate user input\n`;
+            result += `   - Check types and ranges\n\n`;
+
+            result += `6. ERROR HANDLING\n`;
+            result += `   - Use try-catch\n`;
+            result += `   - Provide meaningful errors\n\n`;
+
+            result += `7. SECURITY\n`;
+            result += `   - Sanitize user input\n`;
+            result += `   - Use HTTPS\n`;
+            result += `   - Prevent XSS attacks\n\n`;
+
+            result += `8. TESTING\n`;
+            result += `   - Unit tests\n`;
+            result += `   - Integration tests`;
+
+            output.textContent = result;
+            output.className = "output success";
+        }
+
+        console.log("Advanced JavaScript concepts loaded!");
+    </script>
+</body>
+</html>

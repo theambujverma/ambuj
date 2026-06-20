@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variables and Data Types</title>
+</head>
+<body>
+    <h1>JavaScript Variables and Data Types</h1>
+    <div id="output"></div>
+
+    <script>
+        // ============================================
+        // VARIABLES AND DATA TYPES
+        // ============================================
+
+        // 1. Variable Declaration - var, let, const
+        var name = "John"; // oldest, function-scoped (avoid using)
+        let age = 25; // block-scoped (preferred for mutable data)
+        const email = "john@gmail.com"; // block-scoped, cannot be reassigned
+
+        console.log("Name:", name);
+        console.log("Age:", age);
+        console.log("Email:", email);
+
+        // REAL WORLD: User profile data
+        const userProfile = {
+            username: "john_doe",
+            email: "john@company.com",
+            isActive: true
+        };
+
+        // 2. Data Types in JavaScript
+        const number = 42; // Number
+        const decimal = 3.14; // Float
+        const text = "Hello"; // String
+        const isLoggedIn = true; // Boolean
+        const nothing = null; // Null (intentional absence)
+        const notDefined = undefined; // Undefined (no value assigned)
+        const uniqueId = Symbol("id"); // Symbol (unique identifier)
+        const data = { age: 30 }; // Object
+        const colors = ["red", "green", "blue"]; // Array
+
+        console.log("Number type:", typeof number);
+        console.log("Text type:", typeof text);
+        console.log("Boolean type:", typeof isLoggedIn);
+        console.log("Object type:", typeof data);
+        console.log("Array type:", typeof colors);
+
+        // REAL WORLD: E-commerce product data
+        const product = {
+            id: 1001,
+            name: "Laptop",
+            price: 50000.50,
+            inStock: true,
+            categories: ["Electronics", "Computers"],
+            description: null // not provided yet
+        };
+
+        console.log("\nProduct Info:", product);
+
+        // 3. String Methods (commonly used in web apps)
+        const message = "Welcome to our website";
+        console.log("Original:", message);
+        console.log("Uppercase:", message.toUpperCase());
+        console.log("Lowercase:", message.toLowerCase());
+        console.log("Length:", message.length);
+        console.log("Includes 'website':", message.includes("website"));
+        console.log("Starts with 'Welcome':", message.startsWith("Welcome"));
+        console.log("Substring:", message.substring(0, 7)); // "Welcome"
+
+        // REAL WORLD: User input validation
+        function validateEmail(email) {
+            return email.includes("@") && email.includes(".");
+        }
+        console.log("Email valid:", validateEmail("john@gmail.com"));
+
+        // 4. Number Methods
+        const num = 3.7;
+        console.log("\nNumber Methods:");
+        console.log("Math.floor(3.7):", Math.floor(num)); // 3
+        console.log("Math.ceil(3.7):", Math.ceil(num)); // 4
+        console.log("Math.round(3.7):", Math.round(num)); // 4
+        console.log("Math.abs(-5):", Math.abs(-5)); // 5
+        console.log("Math.max(1,9,5):", Math.max(1, 9, 5)); // 9
+
+        // REAL WORLD: Price calculation for e-commerce
+        const originalPrice = 1000;
+        const discountPercent = 10;
+        const finalPrice = originalPrice - (originalPrice * discountPercent / 100);
+        console.log(`Discount Price: Rs ${finalPrice.toFixed(2)}`); // toFixed(2) = 2 decimal places
+
+        // Display all to webpage
+        const output = document.getElementById("output");
+        output.innerHTML = `
+            <h3>Logged Examples:</h3>
+            <p><strong>User:</strong> ${userProfile.username}</p>
+            <p><strong>Product:</strong> ${product.name} - Rs ${product.price}</p>
+            <p><strong>Discount Price:</strong> Rs ${finalPrice.toFixed(2)}</p>
+            <p>Check console for more details</p>
+        `;
+    </script>
+</body>
+</html>

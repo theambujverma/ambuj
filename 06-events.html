@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events and Event Handling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+        button, input {
+            padding: 10px 15px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #0052a3;
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            margin: 10px;
+            display: inline-block;
+            border-radius: 4px;
+            cursor: pointer;
+            line-height: 100px;
+            text-align: center;
+        }
+        .box:hover {
+            background-color: skyblue;
+        }
+        .box.active {
+            background-color: #0066cc;
+            color: white;
+        }
+        .event-log {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .event-log-item {
+            background: white;
+            padding: 5px;
+            margin: 3px 0;
+            border-left: 3px solid #0066cc;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            width: 200px;
+        }
+        .output {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e6f2ff;
+            border-left: 4px solid #0066cc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Events and Event Handling in JavaScript</h1>
+
+        <!-- DEMO 1: Click Events -->
+        <div class="demo-section">
+            <h3>1. Click Events</h3>
+            <button onclick="handleClick()">Click Me!</button>
+            <p id="clickOutput"></p>
+        </div>
+
+        <!-- DEMO 2: Mouse Events -->
+        <div class="demo-section">
+            <h3>2. Mouse Events</h3>
+            <div class="box" onmouseover="onMouseOver(this)" onmouseout="onMouseOut(this)" onmouseenter="console.log('Mouse Enter')" onmouseleave="console.log('Mouse Leave')">
+                Hover over me
+            </div>
+            <p id="mouseOutput"></p>
+        </div>
+
+        <!-- DEMO 3: Input Events (Real-time Input Handling) -->
+        <div class="demo-section">
+            <h3>3. Input Events - Real-time Search</h3>
+            <input type="text" id="searchInput" placeholder="Search products..." oninput="searchProducts()">
+            <div id="searchResults"></div>
+        </div>
+
+        <!-- DEMO 4: Focus and Blur Events -->
+        <div class="demo-section">
+            <h3>4. Focus and Blur Events</h3>
+            <input type="email" id="emailInput" placeholder="Enter email" onfocus="onEmailFocus()" onblur="validateEmail()">
+            <p id="emailOutput"></p>
+        </div>
+
+        <!-- DEMO 5: Change Event -->
+        <div class="demo-section">
+            <h3>5. Change Event - Select from Dropdown</h3>
+            <select id="categorySelect" onchange="handleCategoryChange()">
+                <option value="">Select Category</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="books">Books</option>
+            </select>
+            <p id="categoryOutput"></p>
+        </div>
+
+        <!-- DEMO 6: Keyboard Events -->
+        <div class="demo-section">
+            <h3>6. Keyboard Events</h3>
+            <input type="text" id="keyboardInput" placeholder="Type here..." onkeydown="handleKeyDown(event)" onkeyup="handleKeyUp(event)">
+            <p id="keyboardOutput"></p>
+            <div id="eventLog" class="event-log"></div>
+        </div>
+
+        <!-- DEMO 7: Form Events -->
+        <div class="demo-section">
+            <h3>7. Form Submission</h3>
+            <form onsubmit="handleFormSubmit(event)">
+                <input type="text" id="nameField" placeholder="Name" required>
+                <input type="email" id="emailField" placeholder="Email" required>
+                <button type="submit">Submit</button>
+            </form>
+            <p id="formOutput"></p>
+        </div>
+
+        <!-- DEMO 8: Custom Event Listener -->
+        <div class="demo-section">
+            <h3>8. Event Listener Registration</h3>
+            <div class="box" id="clickableBox">Click me</div>
+            <button onclick="removeEventListener()">Remove Event Listener</button>
+            <p id="listenerOutput"></p>
+        </div>
+
+        <!-- DEMO 9: Event Delegation -->
+        <div class="demo-section">
+            <h3>9. Event Delegation - List Item Clicks</h3>
+            <ul id="itemList">
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+                <li>Item 4</li>
+            </ul>
+            <p id="delegationOutput"></p>
+        </div>
+
+        <!-- DEMO 10: Multiple Events -->
+        <div class="demo-section">
+            <h3>10. Multiple Events Tracking</h3>
+            <div id="tracker" style="width: 100%; padding: 20px; background: lightgreen; border-radius: 4px; min-height: 50px;">
+                Move, Click, or Type here to track events
+            </div>
+            <p id="trackerOutput"></p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // EVENT TYPES AND HANDLING
+        // ============================================
+
+        // 1. CLICK EVENTS
+        function handleClick() {
+            const output = document.getElementById("clickOutput");
+            output.textContent = "Button clicked at " + new Date().toLocaleTimeString();
+            console.log("Click event fired");
+        }
+
+        // 2. MOUSE EVENTS
+        function onMouseOver(element) {
+            element.style.backgroundColor = "lightgreen";
+            document.getElementById("mouseOutput").textContent = "Mouse is over the box";
+        }
+
+        function onMouseOut(element) {
+            element.style.backgroundColor = "lightblue";
+            document.getElementById("mouseOutput").textContent = "Mouse left the box";
+        }
+
+        // 3. INPUT EVENTS - Real-time Search Example
+        const sampleProducts = [
+            { id: 1, name: "Laptop", category: "Electronics" },
+            { id: 2, name: "Mouse", category: "Electronics" },
+            { id: 3, name: "Monitor", category: "Electronics" },
+            { id: 4, name: "Shirt", category: "Clothing" },
+            { id: 5, name: "Jeans", category: "Clothing" },
+            { id: 6, name: "JavaScript Guide", category: "Books" }
+        ];
+
+        function searchProducts() {
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+            const resultsDiv = document.getElementById("searchResults");
+
+            if (searchTerm === "") {
+                resultsDiv.innerHTML = "";
+                return;
+            }
+
+            // Filter products matching search term
+            const filteredProducts = sampleProducts.filter(product =>
+                product.name.toLowerCase().includes(searchTerm)
+            );
+
+            // Display results
+            resultsDiv.innerHTML = filteredProducts.map(product =>
+                `<div style="padding: 8px; background: #f0f0f0; margin: 5px 0; border-radius: 4px;">
+                    ${product.name} - ${product.category}
+                </div>`
+            ).join("");
+
+            console.log(`Found ${filteredProducts.length} products matching "${searchTerm}"`);
+        }
+
+        // 4. FOCUS AND BLUR EVENTS - Validation Example
+        function onEmailFocus() {
+            document.getElementById("emailOutput").textContent = "Email field focused - please enter valid email";
+        }
+
+        function validateEmail() {
+            const emailInput = document.getElementById("emailInput");
+            const email = emailInput.value;
+            const output = document.getElementById("emailOutput");
+
+            if (email === "") {
+                output.textContent = "Email field is empty";
+                output.style.color = "red";
+            } else if (!email.includes("@") || !email.includes(".")) {
+                output.textContent = "⚠️ Invalid email format";
+                output.style.color = "red";
+            } else {
+                output.textContent = "✓ Valid email";
+                output.style.color = "green";
+            }
+        }
+
+        // 5. CHANGE EVENT - Dropdown Selection
+        function handleCategoryChange() {
+            const select = document.getElementById("categorySelect");
+            const selectedCategory = select.value;
+            const output = document.getElementById("categoryOutput");
+
+            if (selectedCategory) {
+                const categoryProducts = sampleProducts.filter(p => p.category.toLowerCase() === selectedCategory);
+                output.innerHTML = `<strong>${selectedCategory.toUpperCase()}</strong><br>Products: ${categoryProducts.map(p => p.name).join(", ")}`;
+            }
+        }
+
+        // 6. KEYBOARD EVENTS - Track key presses
+        const eventLog = [];
+
+        function handleKeyDown(event) {
+            const output = document.getElementById("keyboardOutput");
+            output.textContent = `Key pressed: ${event.key} (Code: ${event.code})`;
+            console.log("Key down:", event.key);
+        }
+
+        function handleKeyUp(event) {
+            const output = document.getElementById("keyboardOutput");
+            const inputValue = document.getElementById("keyboardInput").value;
+            output.textContent = `Current input: ${inputValue}`;
+
+            // Log event
+            const log = document.getElementById("eventLog");
+            const newLog = document.createElement("div");
+            newLog.className = "event-log-item";
+            newLog.textContent = `[${new Date().toLocaleTimeString()}] Key: ${event.key}`;
+            log.appendChild(newLog);
+            log.scrollTop = log.scrollHeight; // Auto scroll to bottom
+        }
+
+        // 7. FORM SUBMISSION EVENT
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent page reload
+
+            const name = document.getElementById("nameField").value;
+            const email = document.getElementById("emailField").value;
+            const output = document.getElementById("formOutput");
+
+            console.log(`Form submitted: Name=${name}, Email=${email}`);
+            output.innerHTML = `<strong>Form Data Submitted!</strong><br>Name: ${name}<br>Email: ${email}`;
+            output.style.background = "#e6ffe6";
+
+            // Reset form
+            event.target.reset();
+        }
+
+        // 8. EVENT LISTENER REGISTRATION
+        const clickableBox = document.getElementById("clickableBox");
+        let listenerActive = true;
+
+        // Add event listener
+        function boxClickHandler() {
+            document.getElementById("listenerOutput").textContent = "Box clicked - Event listener is active";
+        }
+
+        clickableBox.addEventListener("click", boxClickHandler);
+
+        function removeEventListener() {
+            if (listenerActive) {
+                clickableBox.removeEventListener("click", boxClickHandler);
+                document.getElementById("listenerOutput").textContent = "Event listener removed!";
+                listenerActive = false;
+            } else {
+                clickableBox.addEventListener("click", boxClickHandler);
+                document.getElementById("listenerOutput").textContent = "Event listener added back!";
+                listenerActive = true;
+            }
+        }
+
+        // 9. EVENT DELEGATION - Click on any list item
+        document.getElementById("itemList").addEventListener("click", function(event) {
+            if (event.target.tagName === "LI") {
+                const output = document.getElementById("delegationOutput");
+                output.textContent = `You clicked: ${event.target.textContent}`;
+                event.target.style.background = "#ffcccc";
+            }
+        });
+
+        // 10. MULTIPLE EVENTS TRACKING
+        let eventCount = 0;
+        const tracker = document.getElementById("tracker");
+
+        tracker.addEventListener("mousemove", (e) => {
+            eventCount++;
+            updateTrackerOutput();
+        });
+
+        tracker.addEventListener("click", (e) => {
+            eventCount++;
+            updateTrackerOutput();
+        });
+
+        tracker.addEventListener("mouseenter", (e) => {
+            tracker.style.background = "lightgreen";
+        });
+
+        tracker.addEventListener("mouseleave", (e) => {
+            tracker.style.background = "lightcoral";
+        });
+
+        function updateTrackerOutput() {
+            document.getElementById("trackerOutput").textContent = `Events tracked: ${eventCount}`;
+        }
+
+        // ============================================
+        // EVENT OBJECT INFORMATION
+        // ============================================
+
+        // Log event properties
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("===== EVENT TYPES REFERENCE =====");
+            console.log("Mouse Events: click, dblclick, mouseover, mouseout, mouseenter, mouseleave, mousemove");
+            console.log("Keyboard Events: keydown, keyup, keypress");
+            console.log("Form Events: submit, change, focus, blur, input");
+            console.log("Other Events: load, unload, scroll, resize");
+            console.log("===================================");
+        });
+    </script>
+</body>
+</html>

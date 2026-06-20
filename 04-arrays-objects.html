@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrays and Objects</title>
+</head>
+<body>
+    <h1>Arrays and Objects</h1>
+    <div id="output"></div>
+
+    <script>
+        // ============================================
+        // ARRAYS - Lists of data
+        // ============================================
+
+        // 1. Creating Arrays
+        const emptyArray = [];
+        const numbers = [1, 2, 3, 4, 5];
+        const mixed = [1, "text", true, null];
+        const arrayOfObjects = [
+            { id: 1, name: "John" },
+            { id: 2, name: "Jane" }
+        ];
+
+        console.log("Basic array:", numbers);
+        console.log("Length:", numbers.length);
+        console.log("First element:", numbers[0]);
+        console.log("Last element:", numbers[numbers.length - 1]);
+
+        // 2. Common Array Methods
+
+        // PUSH - Add to end
+        numbers.push(6);
+        console.log("After push(6):", numbers);
+
+        // POP - Remove from end
+        numbers.pop();
+        console.log("After pop():", numbers);
+
+        // UNSHIFT - Add to beginning
+        numbers.unshift(0);
+        console.log("After unshift(0):", numbers);
+
+        // SHIFT - Remove from beginning
+        numbers.shift();
+        console.log("After shift():", numbers);
+
+        // SLICE - Copy part of array
+        const subset = numbers.slice(1, 3);
+        console.log("Slice(1,3):", subset);
+
+        // INDEXOF - Find position
+        console.log("Index of 3:", numbers.indexOf(3));
+
+        // INCLUDES - Check if exists
+        console.log("Includes 4:", numbers.includes(4));
+
+        // REVERSE - Reverse array
+        const reversed = [...numbers].reverse();
+        console.log("Reversed:", reversed);
+
+        // SORT - Sort array
+        const unsorted = [5, 2, 8, 1, 9];
+        const sorted = unsorted.sort((a, b) => a - b);
+        console.log("Sorted:", sorted);
+
+        // ============================================
+        // REAL WORLD ARRAY EXAMPLES
+        // ============================================
+
+        // EXAMPLE 1: Shopping Cart
+        const cartItems = [
+            { id: 1, name: "Laptop", price: 50000, quantity: 1 },
+            { id: 2, name: "Mouse", price: 1500, quantity: 2 },
+            { id: 3, name: "Keyboard", price: 3000, quantity: 1 }
+        ];
+
+        // Calculate total price
+        const totalPrice = cartItems.reduce((total, item) => {
+            return total + (item.price * item.quantity);
+        }, 0);
+
+        console.log("Cart Total:", totalPrice);
+
+        // EXAMPLE 2: Filter items by price range
+        const allProducts = [
+            { name: "Laptop", price: 50000 },
+            { name: "Mouse", price: 1500 },
+            { name: "Keyboard", price: 3000 },
+            { name: "Monitor", price: 15000 },
+            { name: "USB Cable", price: 200 }
+        ];
+
+        const budgetProducts = allProducts.filter(p => p.price <= 5000);
+        console.log("Budget items:", budgetProducts);
+
+        // EXAMPLE 3: Get all product names
+        const productNames = allProducts.map(p => p.name);
+        console.log("Product names:", productNames);
+
+        // EXAMPLE 4: Check if user exists in list
+        const users = ["alice@gmail.com", "bob@gmail.com", "charlie@gmail.com"];
+        function userExists(email) {
+            return users.includes(email);
+        }
+        console.log("alice@gmail.com exists:", userExists("alice@gmail.com"));
+        console.log("david@gmail.com exists:", userExists("david@gmail.com"));
+
+        // EXAMPLE 5: Remove item from array
+        const wishlist = ["Laptop", "Phone", "Tablet", "Keyboard"];
+        const removeIndex = wishlist.indexOf("Phone");
+        if (removeIndex > -1) {
+            wishlist.splice(removeIndex, 1); // Remove 1 item at index
+        }
+        console.log("Wishlist after removal:", wishlist);
+
+        // ============================================
+        // OBJECTS - Key-value pairs
+        // ============================================
+
+        // 1. Creating Objects
+        const person = {
+            firstName: "John",
+            lastName: "Doe",
+            age: 30,
+            email: "john@gmail.com",
+            isActive: true
+        };
+
+        console.log("\nObject:", person);
+        console.log("Access name:", person.firstName); // Dot notation
+        console.log("Access email:", person["email"]); // Bracket notation
+
+        // 2. Modifying Objects
+        person.age = 31; // Update
+        person.phone = "9876543210"; // Add new property
+        delete person.isActive; // Delete property
+
+        console.log("Modified object:", person);
+
+        // 3. Object Methods
+        const keys = Object.keys(person);
+        console.log("Keys:", keys);
+
+        const values = Object.values(person);
+        console.log("Values:", values);
+
+        const entries = Object.entries(person);
+        console.log("Entries:", entries);
+
+        // ============================================
+        // REAL WORLD OBJECT EXAMPLES
+        // ============================================
+
+        // EXAMPLE 1: User Profile
+        const userProfile = {
+            id: 1001,
+            username: "john_doe",
+            firstName: "John",
+            lastName: "Doe",
+            email: "john@gmail.com",
+            phone: "9876543210",
+            address: {
+                street: "123 Main St",
+                city: "Delhi",
+                zipcode: "110001"
+            },
+            roles: ["user", "moderator"],
+            joinDate: "2024-01-15",
+            isVerified: true
+        };
+
+        console.log("User:", userProfile.username);
+        console.log("City:", userProfile.address.city);
+        console.log("Roles:", userProfile.roles);
+
+        // EXAMPLE 2: Product Object
+        const product = {
+            id: 5001,
+            name: "Wireless Mouse",
+            category: "Electronics",
+            price: 1500,
+            currency: "INR",
+            stock: 45,
+            rating: 4.5,
+            reviews: 128,
+            description: "High precision wireless mouse",
+            specifications: {
+                color: "Black",
+                dpi: 1600,
+                batteryLife: "12 months"
+            },
+            inStock: function() {
+                return this.stock > 0;
+            }
+        };
+
+        console.log("\nProduct:", product.name);
+        console.log("Price: Rs", product.price);
+        console.log("In Stock:", product.inStock());
+
+        // EXAMPLE 3: Order Object
+        const order = {
+            orderNumber: "ORD-2024-001",
+            customerId: 1001,
+            items: [
+                { productId: 101, quantity: 2, price: 1500 },
+                { productId: 102, quantity: 1, price: 3000 }
+            ],
+            shippingAddress: {
+                city: "Delhi",
+                state: "Delhi",
+                country: "India"
+            },
+            status: "Confirmed",
+            totalAmount: 6000,
+            createdAt: new Date(),
+            estimatedDelivery: "2024-05-20",
+            getStatus: function() {
+                return `Order ${this.orderNumber} is ${this.status}`;
+            }
+        };
+
+        console.log(order.getStatus());
+
+        // EXAMPLE 4: Destructuring (extract values)
+        const { username, email, address: { city } } = userProfile;
+        console.log("Destructured - username:", username);
+        console.log("Destructured - city:", city);
+
+        // EXAMPLE 5: Spread operator - Copy object
+        const updatedUser = {
+            ...userProfile,
+            email: "newemail@gmail.com", // Override property
+            phone: "9999999999" // Add new property
+        };
+        console.log("Updated user email:", updatedUser.email);
+
+        // Display output
+        const output = document.getElementById("output");
+        output.innerHTML = `
+            <h3>Arrays & Objects Examples:</h3>
+            <p><strong>Shopping Cart Total:</strong> Rs ${totalPrice}</p>
+            <p><strong>Budget Products Found:</strong> ${budgetProducts.length}</p>
+            <p><strong>User Email:</strong> ${userProfile.email}</p>
+            <p><strong>Product:</strong> ${product.name} - Rs ${product.price}</p>
+            <p><strong>Order Status:</strong> ${order.status}</p>
+            <p>Check console for detailed examples</p>
+        `;
+    </script>
+</body>
+</html>

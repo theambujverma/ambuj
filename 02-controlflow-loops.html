@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Flow and Loops</title>
+</head>
+<body>
+    <h1>Control Flow and Loops</h1>
+    <div id="output"></div>
+
+    <script>
+        // ============================================
+        // CONTROL FLOW - IF/ELSE, SWITCH
+        // ============================================
+
+        // 1. IF-ELSE Statement (Decision Making)
+        const userAge = 18;
+        
+        if (userAge < 13) {
+            console.log("Child");
+        } else if (userAge < 18) {
+            console.log("Teenager");
+        } else {
+            console.log("Adult");
+        }
+
+        // REAL WORLD: User membership level
+        const userScore = 850;
+
+        if (userScore >= 900) {
+            console.log("Gold Member - 20% Discount");
+        } else if (userScore >= 700) {
+            console.log("Silver Member - 10% Discount");
+        } else if (userScore >= 500) {
+            console.log("Bronze Member - 5% Discount");
+        } else {
+            console.log("Regular Member - No Discount");
+        }
+
+        // 2. Ternary Operator (Shorthand if-else)
+        const role = "admin";
+        const permission = role === "admin" ? "Full Access" : "Limited Access";
+        console.log("Permission:", permission);
+
+        // REAL WORLD: Check if user can edit post
+        const isPostOwner = true;
+        const canEdit = isPostOwner ? "You can edit" : "You cannot edit";
+        console.log(canEdit);
+
+        // 3. SWITCH Statement
+        const day = 3;
+        let dayName;
+
+        switch (day) {
+            case 1:
+                dayName = "Monday";
+                break;
+            case 2:
+                dayName = "Tuesday";
+                break;
+            case 3:
+                dayName = "Wednesday";
+                break;
+            default:
+                dayName = "Other";
+        }
+        console.log("Day:", dayName);
+
+        // REAL WORLD: Payment method handling
+        function processPayment(method) {
+            switch (method) {
+                case "credit_card":
+                    return "Processing Credit Card...";
+                case "upi":
+                    return "Processing UPI...";
+                case "net_banking":
+                    return "Processing Net Banking...";
+                case "wallet":
+                    return "Processing Wallet...";
+                default:
+                    return "Unknown payment method";
+            }
+        }
+        console.log(processPayment("upi"));
+
+        // ============================================
+        // LOOPS
+        // ============================================
+
+        // 1. FOR Loop
+        console.log("\n--- FOR Loop ---");
+        for (let i = 1; i <= 5; i++) {
+            console.log("Number:", i);
+        }
+
+        // REAL WORLD: Generate 10 products list
+        console.log("\nProducts:");
+        for (let i = 1; i <= 3; i++) {
+            console.log(`Product ${i}: Item #${i}`);
+        }
+
+        // 2. WHILE Loop
+        console.log("\n--- WHILE Loop ---");
+        let countdown = 3;
+        while (countdown > 0) {
+            console.log("Count:", countdown);
+            countdown--;
+        }
+
+        // REAL WORLD: Retry API call
+        let attempts = 0;
+        let success = false;
+        while (attempts < 3 && !success) {
+            console.log(`Attempt ${attempts + 1}...`);
+            // if (Math.random() > 0.5) success = true; // simulated success
+            attempts++;
+        }
+
+        // 3. DO-WHILE Loop (runs at least once)
+        console.log("\n--- DO-WHILE Loop ---");
+        let num = 0;
+        do {
+            console.log("Number:", num);
+            num++;
+        } while (num < 3);
+
+        // 4. FOR-OF Loop (Modern - for arrays/strings)
+        console.log("\n--- FOR-OF Loop ---");
+        const fruits = ["Apple", "Banana", "Orange"];
+        for (const fruit of fruits) {
+            console.log("Fruit:", fruit);
+        }
+
+        // REAL WORLD: Display shopping cart items
+        const cartItems = [
+            { name: "Laptop", price: 50000 },
+            { name: "Mouse", price: 1500 },
+            { name: "Keyboard", price: 3000 }
+        ];
+        for (const item of cartItems) {
+            console.log(`${item.name}: Rs ${item.price}`);
+        }
+
+        // 5. FOR-IN Loop (for objects - gets keys)
+        console.log("\n--- FOR-IN Loop ---");
+        const user = {
+            name: "John",
+            age: 25,
+            city: "Delhi"
+        };
+        for (const key in user) {
+            console.log(`${key}: ${user[key]}`);
+        }
+
+        // 6. FOREACH Loop (for arrays)
+        console.log("\n--- FOREACH Loop ---");
+        const numbers = [10, 20, 30, 40];
+        numbers.forEach((num, index) => {
+            console.log(`Index ${index}: ${num}`);
+        });
+
+        // REAL WORLD: Calculate total bill
+        const prices = [500, 1200, 300, 450];
+        let total = 0;
+        prices.forEach((price) => {
+            total += price;
+        });
+        console.log("Total Bill: Rs", total);
+
+        // BREAK and CONTINUE
+        console.log("\n--- BREAK (exit loop) ---");
+        for (let i = 1; i <= 10; i++) {
+            if (i === 5) break; // exit when i = 5
+            console.log(i);
+        }
+
+        console.log("\n--- CONTINUE (skip iteration) ---");
+        for (let i = 1; i <= 5; i++) {
+            if (i === 3) continue; // skip 3
+            console.log(i);
+        }
+
+        // REAL WORLD: Process orders - skip cancelled orders
+        const orders = [
+            { id: 1, status: "pending" },
+            { id: 2, status: "cancelled" },
+            { id: 3, status: "confirmed" }
+        ];
+
+        console.log("\nProcessing orders (skip cancelled):");
+        for (const order of orders) {
+            if (order.status === "cancelled") continue;
+            console.log(`Processing Order #${order.id}`);
+        }
+
+        // Display summary
+        const output = document.getElementById("output");
+        output.innerHTML = `
+            <h3>Loop Examples:</h3>
+            <p><strong>User Score:</strong> ${userScore} - ${userScore >= 900 ? "Gold Member" : userScore >= 700 ? "Silver Member" : "Bronze Member"}</p>
+            <p><strong>Total Bill:</strong> Rs ${total}</p>
+            <p><strong>Cart Items:</strong> ${cartItems.length} items</p>
+            <p>Check console for all loop examples</p>
+        `;
+    </script>
+</body>
+</html>

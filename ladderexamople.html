@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="result"></h1>
+    <script>
+        let percent = parseInt(window.prompt("Enter you percent?"))
+        if(percent<33){
+            console.error("you are failed")
+        }
+        else if(percent>=45 && percent<60){
+            console.log("you passed with 3rd division")
+        }
+        else if(percent>60 && percent<100){
+            console.info("you acheive the 1st division")
+        }
+        else{
+            document.getElementById('result').innerHTML = "tum kya ho??"
+        }
+
+    </script>
+</body>
+</html>

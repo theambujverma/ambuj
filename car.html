@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AETHER | A Legend Reborn</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;700;800&amp;family=Space+Grotesk:wght@400;600&amp;family=Manrope:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface-variant": "#4c4546",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#848484",
+                    "on-background": "#1a1c1c",
+                    "inverse-surface": "#2f3131",
+                    "background": "#f9f9f9",
+                    "on-secondary-fixed-variant": "#454747",
+                    "tertiary-fixed": "#e4e2e2",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-tertiary-fixed-variant": "#464747",
+                    "on-tertiary-container": "#848484",
+                    "inverse-primary": "#c6c6c6",
+                    "outline-variant": "#cfc4c5",
+                    "surface": "#f9f9f9",
+                    "primary": "#000000",
+                    "secondary-container": "#dfe0e0",
+                    "outline": "#7e7576",
+                    "tertiary": "#000000",
+                    "surface-tint": "#5e5e5e",
+                    "on-primary-fixed": "#1b1b1b",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f1f1f1",
+                    "on-secondary-container": "#616363",
+                    "surface-dim": "#dadada",
+                    "primary-fixed-dim": "#c6c6c6",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "surface-container-low": "#f3f3f3",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e2e2e2",
+                    "secondary-fixed": "#e2e2e2",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-high": "#e8e8e8",
+                    "on-surface": "#1a1c1c",
+                    "primary-container": "#1b1b1b",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "tertiary-container": "#1b1c1c",
+                    "surface-container": "#eeeeee",
+                    "tertiary-fixed-dim": "#c7c6c6",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#5d5f5f",
+                    "primary-fixed": "#e2e2e2",
+                    "on-primary-fixed-variant": "#474747"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-edge": "64px",
+                    "element-gap": "16px",
+                    "container-max": "1440px",
+                    "section-gap": "120px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Space Grotesk"],
+                    "headline-md": ["Epilogue"],
+                    "label-tech": ["Space Grotesk"],
+                    "display-xl": ["Epilogue"],
+                    "body-md": ["Manrope"],
+                    "headline-lg": ["Epilogue"],
+                    "body-lg": ["Manrope"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                    "label-tech": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                    "display-xl": ["84px", {"lineHeight": "92px", "letterSpacing": "-0.04em", "fontWeight": "300"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .cloth-reveal {
+            animation: clothSlide 2.4s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+        @keyframes clothSlide {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+        .grain-overlay {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+        }
+    </style>
+</head>
+<body class="bg-primary overflow-hidden selection:bg-white selection:text-black">
+<!-- TopNavBar Component -->
+<header class="fixed top-0 w-full z-50 bg-white/5 dark:bg-black/20 backdrop-blur-[40px] border-b border-neutral-900/10 dark:border-white/10 flat no-shadows h-20 px-16 flex justify-between items-center">
+<div class="text-xl font-bold tracking-tighter text-neutral-900 dark:text-neutral-50">AETHER</div>
+<nav class="hidden md:flex items-center space-x-12">
+<a class="font-epilogue text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-900 dark:text-white border-b border-neutral-900 dark:border-white pb-1" href="#">Heritage</a>
+<a class="font-epilogue text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors" href="#">Performance</a>
+<a class="font-epilogue text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors" href="#">Bespoke</a>
+<a class="font-epilogue text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors" href="#">Reveal</a>
+</nav>
+<button class="font-epilogue text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-900 dark:text-neutral-50 px-6 py-2 border border-neutral-900/20 dark:border-white/20 hover:bg-neutral-900/5 dark:hover:bg-white/5 transition-all duration-300 scale-95 active:scale-90">
+            Inquire
+        </button>
+</header>
+<!-- Hero Canvas -->
+<main class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
+<!-- Background Text / Ambient Layer -->
+<div class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none"><h2 class="font-display-xl text-display-xl text-white scale-[3] font-bold opacity-[0.03]">MUSTANG</h2></div>
+<div class="container-max mx-auto px-margin-edge relative z-10 flex flex-col items-center">
+<!-- Headline Cluster -->
+<div class="text-center mb-12">
+<span class="font-label-caps text-label-caps text-on-primary-container mb-4 block">AETHER AUTOMOTIVE PRESENTS</span>
+<h1 class="font-display-xl text-display-xl text-white leading-none">A LEGEND REBORN</h1>
+<p class="font-body-lg text-body-lg text-secondary-fixed-dim mt-6 max-w-2xl mx-auto opacity-80">
+                    The classic Ford Mustang, reimagined for the modern era. Precision engineering meets timeless silhouette.
+                </p>
+</div>
+<!-- Car Container with Shadow -->
+<div class="relative w-full max-w-6xl aspect-[21/9] flex items-center justify-center">
+<!-- Ambient occlusion shadow -->
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-black/80 blur-3xl rounded-full"></div>
+<!-- Main Visual -->
+<img alt="Classic Black Ford Mustang - Studio Shot" class="relative z-20 w-full object-contain filter drop-shadow-2xl" src="screen-removebg-preview.png"/>
+<!-- Spec Chips (Overlaying car area) -->
+<div class="absolute -bottom-8 left-0 right-0 flex justify-center gap-element-gap">
+<div class="px-6 py-3 border border-white/10 bg-white/5 backdrop-blur-md rounded-lg">
+<span class="font-label-tech text-label-tech text-on-primary-container block uppercase opacity-50">Top Speed</span>
+<span class="font-label-caps text-[16px] text-white">198 MPH</span>
+</div>
+<div class="px-6 py-3 border border-white/10 bg-white/5 backdrop-blur-md rounded-lg">
+<span class="font-label-tech text-label-tech text-on-primary-container block uppercase opacity-50">0-60 MPH</span>
+<span class="font-label-caps text-[16px] text-white">3.4 SEC</span>
+</div>
+<div class="px-6 py-3 border border-white/10 bg-white/5 backdrop-blur-md rounded-lg">
+<span class="font-label-tech text-label-tech text-on-primary-container block uppercase opacity-50">Chassis</span>
+<span class="font-label-caps text-[16px] text-white">CARBON-G</span>
+</div>
+</div>
+</div>
+
+</main>
+<!-- The Reveal Trigger / White Cloth Overlay -->
+<div class="fixed inset-0 z-[100] cloth-reveal pointer-events-none">
+<div class="absolute inset-0 bg-surface-container-lowest">
+<!-- Cloth Texture Grain -->
+<div class="absolute inset-0 grain-overlay"></div>
+<!-- Subtle Center Detail on Cloth -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="flex flex-col items-center opacity-20">
+<div class="w-px h-24 bg-black mb-8"></div>
+<span class="font-label-caps text-black tracking-[0.5em] text-[14px]">AETHER</span>
+</div>
+</div>
+<!-- Bottom Edge Soft Shadow (Simulating fold) -->
+<div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/5 to-transparent"></div>
+</div>
+</div>
+</body></html>

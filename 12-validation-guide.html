@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Validation Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 50px;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .subsection {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .subsection h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+        .keyword { color: #ff79c6; }
+        .string { color: #a1ff60; }
+        .number { color: #bd93f9; }
+        .comment { color: #6272a4; }
+        .form-demo {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border: 2px solid #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        input.valid {
+            border: 2px solid #28a745;
+            background-color: #f0fff4;
+        }
+        input.invalid {
+            border: 2px solid #dc3545;
+            background-color: #fff5f5;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .success-message {
+            color: #28a745;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+        .success-message.show {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .table th {
+            background: #667eea;
+            color: white;
+        }
+        .table tr:hover {
+            background: #f5f5f5;
+        }
+        .example-output {
+            background: #fffbea;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .validation-tip {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .validation-tip strong {
+            color: #2196F3;
+        }
+        .result-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 JavaScript Validation Guide</h1>
+            <p>Master Form & Data Validation Techniques</p>
+        </header>
+
+        <div class="content">
+            <!-- ============ BASICS ============ -->
+            <div class="section">
+                <h2>1️⃣ Validation Basics</h2>
+                
+                <div class="subsection">
+                    <h3>What is Validation?</h3>
+                    <p>Validation checks if data meets certain requirements before processing. Types:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Client-side:</strong> JavaScript validation in the browser (fast feedback)</li>
+                        <li><strong>Server-side:</strong> Validation on the server (always required for security)</li>
+                        <li><strong>Real-time:</strong> Validates as user types</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <h3>Basic Validation Techniques</h3>
+                    <div class="code-block">
+<span class="comment">// 1. Check if empty</span>
+<span class="keyword">if</span> (username === <span class="string">""</span>) {
+    console.log(<span class="string">"Username is required"</span>);
+}
+
+<span class="comment">// 2. Check length</span>
+<span class="keyword">if</span> (password.length &lt; <span class="number">8</span>) {
+    console.log(<span class="string">"Password must be at least 8 characters"</span>);
+}
+
+<span class="comment">// 3. Check type</span>
+<span class="keyword">if</span> (<span class="keyword">typeof</span> age !== <span class="string">"number"</span>) {
+    console.log(<span class="string">"Age must be a number"</span>);
+}
+
+<span class="comment">// 4. Check range</span>
+<span class="keyword">if</span> (age &lt; <span class="number">18</span> || age &gt; <span class="number">100</span>) {
+    console.log(<span class="string">"Age must be between 18 and 100"</span>);
+}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ EMAIL VALIDATION ============ -->
+            <div class="section">
+                <h2>2️⃣ Email Validation</h2>
+                
+                <div class="subsection">
+                    <h3>Method 1: Regular Expression (Regex)</h3>
+                    <div class="code-block">
+<span class="comment">// Simple email regex</span>
+<span class="keyword">const</span> emailRegex = <span class="string">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;
+
+<span class="keyword">function</span> validateEmail(email) {
+    <span class="keyword">return</span> emailRegex.test(email);
+}
+
+<span class="comment">// Usage</span>
+console.log(validateEmail(<span class="string">"user@example.com"</span>)); <span class="comment">// true</span>
+console.log(validateEmail(<span class="string">"invalid.email"</span>)); <span class="comment">// false</span>
+
+<span class="comment">// RFC 5322 compliant (more complex)</span>
+<span class="keyword">const</span> strictEmailRegex = <span class="string">/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/</span>;
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Method 2: HTML5 Built-in Validation</h3>
+                    <div class="code-block">
+&lt;input type=<span class="string">"email"</span> name=<span class="string">"email"</span> required&gt;
+
+<span class="comment">// Check validity with JavaScript</span>
+<span class="keyword">const</span> emailInput = document.querySelector(<span class="string">'input[type="email"]'</span>);
+<span class="keyword">if</span> (emailInput.validity.valid) {
+    console.log(<span class="string">"Email is valid"</span>);
+}
+                    </div>
+                </div>
+
+                <div class="form-demo">
+                    <h4>Try Email Validation:</h4>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="text" id="emailInput" placeholder="Enter email address">
+                        <div class="error-message" id="emailError"></div>
+                        <div class="success-message" id="emailSuccess">✓ Valid email</div>
+                    </div>
+                    <button onclick="validateEmailDemo()">Check Email</button>
+                </div>
+            </div>
+
+            <!-- ============ PASSWORD VALIDATION ============ -->
+            <div class="section">
+                <h2>3️⃣ Password Validation</h2>
+                
+                <div class="subsection">
+                    <h3>Strong Password Requirements</h3>
+                    <table class="table">
+                        <tr>
+                            <th>Requirement</th>
+                            <th>Regex Pattern</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td>Minimum 8 characters</td>
+                            <td>/.{8,}/</td>
+                            <td>Password123</td>
+                        </tr>
+                        <tr>
+                            <td>Contains uppercase</td>
+                            <td>/[A-Z]/</td>
+                            <td>Pass</td>
+                        </tr>
+                        <tr>
+                            <td>Contains lowercase</td>
+                            <td>/[a-z]/</td>
+                            <td>word</td>
+                        </tr>
+                        <tr>
+                            <td>Contains digit</td>
+                            <td>/[0-9]/</td>
+                            <td>123</td>
+                        </tr>
+                        <tr>
+                            <td>Contains special char</td>
+                            <td>/[!@#$%^&*]/</td>
+                            <td>!@#</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Password Validation Function</h3>
+                    <div class="code-block">
+<span class="keyword">function</span> validatePassword(password) {
+    <span class="keyword">const</span> rules = {
+        minLength: password.length &gt;= <span class="number">8</span>,
+        hasUppercase: <span class="string">/[A-Z]/</span>.test(password),
+        hasLowercase: <span class="string">/[a-z]/</span>.test(password),
+        hasDigit: <span class="string">/[0-9]/</span>.test(password),
+        hasSpecialChar: <span class="string">/[!@#$%^&*]/</span>.test(password)
+    };
+    
+    <span class="keyword">return</span> Object.values(rules).every(rule =&gt; rule);
+}
+
+<span class="comment">// Usage</span>
+console.log(validatePassword(<span class="string">"Weak123"</span>)); <span class="comment">// false</span>
+console.log(validatePassword(<span class="string">"Strong@Pass123"</span>)); <span class="comment">// true</span>
+                    </div>
+                </div>
+
+                <div class="form-demo">
+                    <h4>Try Password Validation:</h4>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="passwordInput" placeholder="Min 8 chars: Upper + Lower + Digit + Special">
+                        <div id="passwordFeedback"></div>
+                    </div>
+                    <button onclick="validatePasswordDemo()">Check Password Strength</button>
+                </div>
+            </div>
+
+            <!-- ============ NUMBER VALIDATION ============ -->
+            <div class="section">
+                <h2>4️⃣ Number Validation</h2>
+                
+                <div class="subsection">
+                    <h3>Validating Different Number Types</h3>
+                    <div class="code-block">
+<span class="comment">// Check if string is a number</span>
+<span class="keyword">function</span> isNumber(value) {
+    <span class="keyword">return</span> !isNaN(value) &amp;&amp; value !== <span class="string">""</span>;
+}
+
+<span class="comment">// Check if integer</span>
+<span class="keyword">function</span> isInteger(value) {
+    <span class="keyword">return</span> Number.isInteger(Number(value));
+}
+
+<span class="comment">// Check range</span>
+<span class="keyword">function</span> isInRange(value, min, max) {
+    <span class="keyword">return</span> value &gt;= min &amp;&amp; value &lt;= max;
+}
+
+<span class="comment">// Check if positive</span>
+<span class="keyword">function</span> isPositive(value) {
+    <span class="keyword">return</span> Number(value) &gt; <span class="number">0</span>;
+}
+
+<span class="comment">// Examples</span>
+console.log(isNumber(<span class="string">"123"</span>)); <span class="comment">// true</span>
+console.log(isInteger(<span class="string">"45.5"</span>)); <span class="comment">// false</span>
+console.log(isInRange(<span class="number">25</span>, <span class="number">18</span>, <span class="number">65</span>)); <span class="comment">// true</span>
+                    </div>
+                </div>
+
+                <div class="form-demo">
+                    <h4>Try Number Validation:</h4>
+                    <div class="form-group">
+                        <label>Age (18-100)</label>
+                        <input type="text" id="ageInput" placeholder="Enter your age">
+                        <div class="error-message" id="ageError"></div>
+                    </div>
+                    <button onclick="validateNumberDemo()">Validate Age</button>
+                </div>
+            </div>
+
+            <!-- ============ FORM VALIDATION ============ -->
+            <div class="section">
+                <h2>5️⃣ Complete Form Validation</h2>
+                
+                <div class="subsection">
+                    <h3>Form Validation Example</h3>
+                    <div class="code-block">
+<span class="keyword">function</span> validateForm(formData) {
+    <span class="keyword">const</span> errors = {};
+    
+    <span class="comment">// Validate username</span>
+    <span class="keyword">if</span> (!formData.username || formData.username.length &lt; <span class="number">3</span>) {
+        errors.username = <span class="string">"Username must be at least 3 characters"</span>;
+    }
+    
+    <span class="comment">// Validate email</span>
+    <span class="keyword">const</span> emailRegex = <span class="string">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;
+    <span class="keyword">if</span> (!emailRegex.test(formData.email)) {
+        errors.email = <span class="string">"Please enter a valid email"</span>;
+    }
+    
+    <span class="comment">// Validate password</span>
+    <span class="keyword">if</span> (formData.password.length &lt; <span class="number">8</span>) {
+        errors.password = <span class="string">"Password must be at least 8 characters"</span>;
+    }
+    
+    <span class="keyword">return</span> {
+        isValid: Object.keys(errors).length === <span class="number">0</span>,
+        errors: errors
+    };
+}
+                    </div>
+                </div>
+
+                <div class="form-demo">
+                    <h4>Interactive Form Validation:</h4>
+                    <form id="demoForm" onsubmit="submitFormDemo(event)">
+                        <div class="form-group">
+                            <label>Username (min 3 chars)</label>
+                            <input type="text" id="usernameInput" placeholder="Enter username">
+                            <div class="error-message" id="usernameError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" id="formEmailInput" placeholder="Enter email">
+                            <div class="error-message" id="formEmailError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password (min 8 chars)</label>
+                            <input type="password" id="formPasswordInput" placeholder="Enter password">
+                            <div class="error-message" id="formPasswordError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="confirmPasswordInput" placeholder="Confirm password">
+                            <div class="error-message" id="confirmPasswordError"></div>
+                        </div>
+
+                        <button type="submit">Submit Form</button>
+                    </form>
+                    <div id="formResult" class="result-box"></div>
+                </div>
+            </div>
+
+            <!-- ============ REAL-TIME VALIDATION ============ -->
+            <div class="section">
+                <h2>6️⃣ Real-Time Validation</h2>
+                
+                <div class="subsection">
+                    <h3>Validate as User Types</h3>
+                    <div class="code-block">
+<span class="comment">// Add event listener for real-time validation</span>
+<span class="keyword">const</span> usernameField = document.getElementById(<span class="string">"username"</span>);
+
+usernameField.addEventListener(<span class="string">"input"</span>, <span class="keyword">function</span>() {
+    <span class="keyword">if</span> (<span class="keyword">this</span>.value.length &gt;= <span class="number">3</span>) {
+        <span class="keyword">this</span>.classList.add(<span class="string">"valid"</span>);
+        <span class="keyword">this</span>.classList.remove(<span class="string">"invalid"</span>);
+    } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.classList.add(<span class="string">"invalid"</span>);
+        <span class="keyword">this</span>.classList.remove(<span class="string">"valid"</span>);
+    }
+});
+                    </div>
+                </div>
+
+                <div class="form-demo">
+                    <h4>Real-Time Username Validation:</h4>
+                    <div class="form-group">
+                        <label>Username (min 3 chars)</label>
+                        <input type="text" id="realtimeUsername" placeholder="Type something...">
+                        <div id="realtimeFeedback" style="color: #666; margin-top: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ REGEX PATTERNS ============ -->
+            <div class="section">
+                <h2>7️⃣ Common Regex Patterns</h2>
+                
+                <div class="subsection">
+                    <table class="table">
+                        <tr>
+                            <th>Pattern</th>
+                            <th>Regex</th>
+                            <th>Examples</th>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</td>
+                            <td>user@example.com</td>
+                        </tr>
+                        <tr>
+                            <td>Phone (US)</td>
+                            <td>/^\d{3}-\d{3}-\d{4}$/</td>
+                            <td>123-456-7890</td>
+                        </tr>
+                        <tr>
+                            <td>URL</td>
+                            <td">/^https?:\/\/.+/</td>
+                            <td>https://example.com</td>
+                        </tr>
+                        <tr>
+                            <td>ZIP Code (US)</td>
+                            <td>/^\d{5}(-\d{4})?$/</td>
+                            <td>12345 or 12345-6789</td>
+                        </tr>
+                        <tr>
+                            <td>Alphanumeric only</td>
+                            <td>/^[a-zA-Z0-9]+$/</td>
+                            <td>Test123</td>
+                        </tr>
+                        <tr>
+                            <td>No special chars</td>
+                            <td>/^[a-zA-Z ]+$/</td>
+                            <td>John Doe</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ============ TIPS & BEST PRACTICES ============ -->
+            <div class="section">
+                <h2>8️⃣ Best Practices & Tips</h2>
+                
+                <div class="validation-tip">
+                    <strong>✓ Always Validate on Server-side</strong><br>
+                    Client-side validation is for user experience only. Always validate on the server for security!
+                </div>
+
+                <div class="validation-tip">
+                    <strong>✓ Provide Clear Error Messages</strong><br>
+                    Tell users exactly what's wrong: "Password must be at least 8 characters with a number and special character"
+                </div>
+
+                <div class="validation-tip">
+                    <strong>✓ Use Trim() for Strings</strong><br>
+                    Remove whitespace: <code>email.trim()</code> to prevent "  user@example.com  " issues
+                </div>
+
+                <div class="validation-tip">
+                    <strong>✓ Validate Data Type First</strong><br>
+                    Check if value exists and has correct type before testing patterns or ranges
+                </div>
+
+                <div class="validation-tip">
+                    <strong>✓ Use try-catch for Complex Validation</strong><br>
+                    Prevent errors when parsing or validating complex data structures
+                </div>
+
+                <div class="subsection">
+                    <h3>Comprehensive Validation Utility</h3>
+                    <div class="code-block">
+<span class="keyword">const</span> Validator = {
+    isEmpty: (value) =&gt; !value || value.toString().trim() === <span class="string">""</span>,
+    
+    isEmail: (email) =&gt; <span class="string">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>.test(email),
+    
+    isPhone: (phone) =&gt; <span class="string">/^\d{3}-\d{3}-\d{4}$/</span>.test(phone),
+    
+    isStrong: (password) =&gt; password.length &gt;= <span class="number">8</span> &amp;&amp;
+                         <span class="string">/[A-Z]/</span>.test(password) &amp;&amp;
+                         <span class="string">/[0-9]/</span>.test(password),
+    
+    minLength: (value, min) =&gt; value.toString().length &gt;= min,
+    
+    maxLength: (value, max) =&gt; value.toString().length &lt;= max,
+    
+    isNumber: (value) =&gt; !isNaN(value) &amp;&amp; value !== <span class="string">""</span>,
+    
+    inRange: (value, min, max) =&gt; value &gt;= min &amp;&amp; value &lt;= max
+};
+
+<span class="comment">// Usage</span>
+console.log(Validator.isEmail(<span class="string">"test@email.com"</span>)); <span class="comment">// true</span>
+console.log(Validator.isStrong(<span class="string">"Pass123"</span>)); <span class="comment">// false</span>
+console.log(Validator.inRange(<span class="number">25</span>, <span class="number">18</span>, <span class="number">65</span>)); <span class="comment">// true</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ EMAIL VALIDATION ============
+        function validateEmailDemo() {
+            const email = document.getElementById('emailInput').value;
+            const errorDiv = document.getElementById('emailError');
+            const successDiv = document.getElementById('emailSuccess');
+            
+            errorDiv.classList.remove('show');
+            successDiv.classList.remove('show');
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!email) {
+                errorDiv.textContent = 'Email is required';
+                errorDiv.classList.add('show');
+                document.getElementById('emailInput').classList.add('invalid');
+            } else if (!emailRegex.test(email)) {
+                errorDiv.textContent = 'Please enter a valid email address';
+                errorDiv.classList.add('show');
+                document.getElementById('emailInput').classList.add('invalid');
+            } else {
+                successDiv.classList.add('show');
+                document.getElementById('emailInput').classList.remove('invalid');
+                document.getElementById('emailInput').classList.add('valid');
+            }
+        }
+
+        // ============ PASSWORD VALIDATION ============
+        function validatePasswordDemo() {
+            const password = document.getElementById('passwordInput').value;
+            const feedback = document.getElementById('passwordFeedback');
+            
+            const checks = {
+                minLength: password.length >= 8,
+                hasUppercase: /[A-Z]/.test(password),
+                hasLowercase: /[a-z]/.test(password),
+                hasDigit: /[0-9]/.test(password),
+                hasSpecialChar: /[!@#$%^&*]/.test(password)
+            };
+            
+            let html = '<div style="margin-top: 10px;">';
+            html += `<p>✓ Min 8 characters: <span style="color: ${checks.minLength ? 'green' : 'red'}">${checks.minLength ? '✓' : '✗'}</span></p>`;
+            html += `<p>✓ Uppercase (A-Z): <span style="color: ${checks.hasUppercase ? 'green' : 'red'}">${checks.hasUppercase ? '✓' : '✗'}</span></p>`;
+            html += `<p>✓ Lowercase (a-z): <span style="color: ${checks.hasLowercase ? 'green' : 'red'}">${checks.hasLowercase ? '✓' : '✗'}</span></p>`;
+            html += `<p>✓ Digit (0-9): <span style="color: ${checks.hasDigit ? 'green' : 'red'}">${checks.hasDigit ? '✓' : '✗'}</span></p>`;
+            html += `<p>✓ Special Char (!@#$%^&*): <span style="color: ${checks.hasSpecialChar ? 'green' : 'red'}">${checks.hasSpecialChar ? '✓' : '✗'}</span></p>`;
+            html += '</div>';
+            
+            feedback.innerHTML = html;
+        }
+
+        // ============ NUMBER VALIDATION ============
+        function validateNumberDemo() {
+            const age = document.getElementById('ageInput').value;
+            const errorDiv = document.getElementById('ageError');
+            const input = document.getElementById('ageInput');
+            
+            errorDiv.classList.remove('show');
+            input.classList.remove('invalid', 'valid');
+            
+            if (!age) {
+                errorDiv.textContent = 'Age is required';
+                errorDiv.classList.add('show');
+                input.classList.add('invalid');
+            } else if (isNaN(age)) {
+                errorDiv.textContent = 'Age must be a number';
+                errorDiv.classList.add('show');
+                input.classList.add('invalid');
+            } else if (age < 18 || age > 100) {
+                errorDiv.textContent = 'Age must be between 18 and 100';
+                errorDiv.classList.add('show');
+                input.classList.add('invalid');
+            } else {
+                input.classList.add('valid');
+            }
+        }
+
+        // ============ FORM VALIDATION ============
+        function submitFormDemo(event) {
+            event.preventDefault();
+            
+            const formData = {
+                username: document.getElementById('usernameInput').value,
+                email: document.getElementById('formEmailInput').value,
+                password: document.getElementById('formPasswordInput').value,
+                confirmPassword: document.getElementById('confirmPasswordInput').value
+            };
+            
+            clearAllErrors();
+            const errors = validateFormData(formData);
+            
+            if (Object.keys(errors).length === 0) {
+                document.getElementById('formResult').innerHTML = 
+                    '<span style="color: green; font-weight: bold;">✓ Form submitted successfully!</span>';
+            } else {
+                displayFormErrors(errors);
+            }
+        }
+
+        function validateFormData(formData) {
+            const errors = {};
+            
+            // Username validation
+            if (!formData.username || formData.username.length < 3) {
+                errors.username = 'Username must be at least 3 characters';
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                errors.email = 'Please enter a valid email address';
+            }
+            
+            // Password validation
+            if (formData.password.length < 8) {
+                errors.password = 'Password must be at least 8 characters';
+            }
+            
+            // Confirm password
+            if (formData.password !== formData.confirmPassword) {
+                errors.confirmPassword = 'Passwords do not match';
+            }
+            
+            return errors;
+        }
+
+        function displayFormErrors(errors) {
+            if (errors.username) {
+                const elem = document.getElementById('usernameError');
+                elem.textContent = errors.username;
+                elem.classList.add('show');
+            }
+            if (errors.email) {
+                const elem = document.getElementById('formEmailError');
+                elem.textContent = errors.email;
+                elem.classList.add('show');
+            }
+            if (errors.password) {
+                const elem = document.getElementById('formPasswordError');
+                elem.textContent = errors.password;
+                elem.classList.add('show');
+            }
+            if (errors.confirmPassword) {
+                const elem = document.getElementById('confirmPasswordError');
+                elem.textContent = errors.confirmPassword;
+                elem.classList.add('show');
+            }
+        }
+
+        function clearAllErrors() {
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.remove('show');
+            });
+            document.getElementById('formResult').innerHTML = '';
+        }
+
+        // ============ REAL-TIME VALIDATION ============
+        document.getElementById('realtimeUsername').addEventListener('input', function() {
+            const feedback = document.getElementById('realtimeFeedback');
+            const value = this.value;
+            
+            if (value.length === 0) {
+                feedback.textContent = '';
+                this.classList.remove('valid', 'invalid');
+            } else if (value.length < 3) {
+                feedback.textContent = `${3 - value.length} more characters needed...`;
+                feedback.style.color = '#ff9800';
+                this.classList.add('invalid');
+                this.classList.remove('valid');
+            } else {
+                feedback.textContent = '✓ Username is valid!';
+                feedback.style.color = '#28a745';
+                this.classList.add('valid');
+                this.classList.remove('invalid');
+            }
+        });
+    </script>
+</body>
+</html>

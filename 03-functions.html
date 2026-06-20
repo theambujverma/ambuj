@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions</title>
+</head>
+<body>
+    <h1>JavaScript Functions</h1>
+    <div id="output"></div>
+
+    <script>
+        // ============================================
+        // FUNCTIONS - Reusable blocks of code
+        // ============================================
+
+        // 1. Basic Function Declaration
+        function greet(name) {
+            return "Hello, " + name;
+        }
+        console.log(greet("John"));
+
+        // 2. Function Expression
+        const add = function(a, b) {
+            return a + b;
+        };
+        console.log("Add 5 + 3 =", add(5, 3));
+
+        // 3. Arrow Function (Modern syntax)
+        const multiply = (a, b) => {
+            return a * b;
+        };
+        console.log("5 * 3 =", multiply(5, 3));
+
+        // 4. Arrow Function - Single line (implicit return)
+        const square = (num) => num * num;
+        console.log("Square of 5:", square(5));
+
+        // 5. Arrow Function - No parameters
+        const getMessage = () => "Welcome to our website!";
+        console.log(getMessage());
+
+        // ============================================
+        // REAL WORLD EXAMPLES
+        // ============================================
+
+        // EXAMPLE 1: E-commerce - Calculate discounted price
+        function calculateDiscount(originalPrice, discountPercent) {
+            const discountAmount = originalPrice * (discountPercent / 100);
+            const finalPrice = originalPrice - discountAmount;
+            return {
+                original: originalPrice,
+                discount: discountAmount,
+                final: finalPrice
+            };
+        }
+
+        const priceInfo = calculateDiscount(1000, 20);
+        console.log("Price Info:", priceInfo);
+        console.log(`Rs ${priceInfo.original} - ${priceInfo.discount} = Rs ${priceInfo.final}`);
+
+        // EXAMPLE 2: Validate user registration data
+        function validateUser(user) {
+            // Check if all required fields exist
+            if (!user.name || user.name.length === 0) {
+                return { valid: false, message: "Name is required" };
+            }
+            if (!user.email || !user.email.includes("@")) {
+                return { valid: false, message: "Valid email is required" };
+            }
+            if (!user.password || user.password.length < 6) {
+                return { valid: false, message: "Password must be at least 6 characters" };
+            }
+            return { valid: true, message: "User data is valid" };
+        }
+
+        const newUser = { name: "Alice", email: "alice@gmail.com", password: "securepass123" };
+        const validation = validateUser(newUser);
+        console.log("Validation:", validation);
+
+        // EXAMPLE 3: Filter products by category
+        function filterProducts(products, category) {
+            return products.filter(product => product.category === category);
+        }
+
+        const allProducts = [
+            { id: 1, name: "Laptop", category: "Electronics", price: 50000 },
+            { id: 2, name: "Shirt", category: "Clothing", price: 1000 },
+            { id: 3, name: "Mouse", category: "Electronics", price: 1500 },
+            { id: 4, name: "Pants", category: "Clothing", price: 2000 }
+        ];
+
+        const electronics = filterProducts(allProducts, "Electronics");
+        console.log("Electronics:", electronics);
+
+        // EXAMPLE 4: Search functionality
+        function searchProducts(products, keyword) {
+            keyword = keyword.toLowerCase();
+            return products.filter(product => 
+                product.name.toLowerCase().includes(keyword) ||
+                product.category.toLowerCase().includes(keyword)
+            );
+        }
+
+        const searchResults = searchProducts(allProducts, "laptop");
+        console.log("Search results for 'laptop':", searchResults);
+
+        // EXAMPLE 5: Calculate total from order items
+        function calculateTotal(items) {
+            let total = 0;
+            items.forEach(item => {
+                total += item.price * item.quantity;
+            });
+            return total;
+        }
+
+        const orderItems = [
+            { name: "Laptop", price: 50000, quantity: 1 },
+            { name: "Mouse", price: 1500, quantity: 2 },
+            { name: "Keyboard", price: 3000, quantity: 1 }
+        ];
+
+        const orderTotal = calculateTotal(orderItems);
+        console.log("Order Total: Rs", orderTotal);
+
+        // EXAMPLE 6: Generate unique ID
+        function generateUserId() {
+            return "USER_" + Date.now() + Math.floor(Math.random() * 1000);
+        }
+
+        console.log("Generated User ID:", generateUserId());
+
+        // EXAMPLE 7: String manipulation - Format phone number
+        function formatPhoneNumber(phone) {
+            // Remove non-digits
+            let cleaned = phone.replace(/\D/g, '');
+            // Format as (XXX) XXX-XXXX
+            if (cleaned.length === 10) {
+                return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+            }
+            return "Invalid phone number";
+        }
+
+        console.log("Formatted Phone:", formatPhoneNumber("9876543210"));
+
+        // EXAMPLE 8: Higher-order function - Function that returns a function
+        function createMultiplier(multiplier) {
+            return function(number) {
+                return number * multiplier;
+            };
+        }
+
+        const double = createMultiplier(2);
+        const triple = createMultiplier(3);
+        console.log("Double of 5:", double(5));
+        console.log("Triple of 5:", triple(5));
+
+        // EXAMPLE 9: Callback function - Execute function after another
+        function displayWithDelay(message, callback) {
+            console.log("Processing...");
+            setTimeout(() => {
+                console.log(message);
+                if (callback) callback();
+            }, 1000);
+        }
+
+        displayWithDelay("Data loaded!", () => {
+            console.log("Callback executed!");
+        });
+
+        // EXAMPLE 10: Array methods with functions
+        const numbers = [1, 2, 3, 4, 5];
+
+        // MAP - Transform each element
+        const doubled = numbers.map(num => num * 2);
+        console.log("Doubled:", doubled);
+
+        // FILTER - Keep only matching elements
+        const evenNumbers = numbers.filter(num => num % 2 === 0);
+        console.log("Even numbers:", evenNumbers);
+
+        // REDUCE - Combine into single value
+        const sum = numbers.reduce((total, num) => total + num, 0);
+        console.log("Sum:", sum);
+
+        // Display output
+        const output = document.getElementById("output");
+        output.innerHTML = `
+            <h3>Function Examples:</h3>
+            <p><strong>Discounted Price:</strong> Rs ${priceInfo.final} (from Rs ${priceInfo.original})</p>
+            <p><strong>Order Total:</strong> Rs ${orderTotal}</p>
+            <p><strong>Electronics Found:</strong> ${electronics.length} products</p>
+            <p><strong>Sum of [1,2,3,4,5]:</strong> ${sum}</p>
+            <p><strong>User ID:</strong> ${generateUserId()}</p>
+            <p>Check console for all function examples</p>
+        `;
+    </script>
+</body>
+</html>
