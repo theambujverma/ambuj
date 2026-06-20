@@ -17,20 +17,39 @@
 
     // }
     // fact(5)
-    // wap to cheeck prime number or not
-    function prime(n){
-        let count = 0;
-        for(let i = 1; i <=n; i++){
-            if(n % i == 0){
-                count++;
+   /////////////// // wap to cheeck prime number or not
+    // function prime(n){
+    //     let count = 0;
+    //     for(let i = 1; i <=n; i++){
+    //         if(n % i == 0){
+    //             count++;
+    //         }
+    //     }
+    //     if(count == 2){
+    //         console.log(`${n} is a prime number`);
+    //     }
+    //     else{
+    //         console.log(`${n} is not a prime number`);
+    //     }
+    // }
+    // prime(17);
+    // wap to print the number is range using function 
+    // function range(a, b){
+    //     for(let i = a; i <= b; i++){
+    //         if(i % 2 == 0){
+    //             console.log(`${i}`);
+    //         }
+    //     }
+    // }
+    // range(10,50);
+    // print the number is range using funtion print 3 and 5 multiple
+    function range(a, b){
+        for(let i = a; i <= b; i++){
+            if(i % 3 == 0 && i % 5 == 0){
+                console.log(`${i}`);
             }
         }
-        if(count == 2){
-            console.log(`${n} is a prime number`);
-        }
-        else{
-            console.log(`${n} is not a prime number`);
-        }
     }
-    prime(17);
+    range(10,50);
+    
   </script>
